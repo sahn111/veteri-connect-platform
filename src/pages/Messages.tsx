@@ -19,10 +19,10 @@ const Messages = () => {
       time: "10:30",
       isRead: true,
       conversation: [
-        { text: "Merhaba, ilaçlar hakkında bilgi almak istiyorum.", sender: "other", time: "10:30" },
-        { text: "Merhaba, size nasıl yardımcı olabilirim?", sender: "user", time: "10:31" },
-        { text: "Aspirin stokta var mı?", sender: "other", time: "10:32" },
-        { text: "Evet, hem 20'lik hem de 40'lık paketlerimiz mevcut.", sender: "user", time: "10:33" },
+        { text: "Merhaba, ilaçlar hakkında bilgi almak istiyorum.", sender: "other" as const, time: "10:30" },
+        { text: "Merhaba, size nasıl yardımcı olabilirim?", sender: "user" as const, time: "10:31" },
+        { text: "Aspirin stokta var mı?", sender: "other" as const, time: "10:32" },
+        { text: "Evet, hem 20'lik hem de 40'lık paketlerimiz mevcut.", sender: "user" as const, time: "10:33" },
       ]
     },
     {
@@ -32,10 +32,10 @@ const Messages = () => {
       time: "11:45",
       isRead: false,
       conversation: [
-        { text: "Siparişim ne zaman teslim edilecek?", sender: "other", time: "11:45" },
-        { text: "Sipariş numaranızı paylaşabilir misiniz?", sender: "user", time: "11:46" },
-        { text: "Sipariş numaram: #12345", sender: "other", time: "11:47" },
-        { text: "Yarın öğleden önce teslim edilecek.", sender: "user", time: "11:48" },
+        { text: "Siparişim ne zaman teslim edilecek?", sender: "other" as const, time: "11:45" },
+        { text: "Sipariş numaranızı paylaşabilir misiniz?", sender: "user" as const, time: "11:46" },
+        { text: "Sipariş numaram: #12345", sender: "other" as const, time: "11:47" },
+        { text: "Yarın öğleden önce teslim edilecek.", sender: "user" as const, time: "11:48" },
       ]
     },
     {
@@ -45,10 +45,10 @@ const Messages = () => {
       time: "14:20",
       isRead: true,
       conversation: [
-        { text: "Stokta başka renk seçeneği var mı?", sender: "other", time: "14:20" },
-        { text: "Hangi ürün için soruyorsunuz?", sender: "user", time: "14:21" },
-        { text: "Tansiyon aleti için", sender: "other", time: "14:22" },
-        { text: "Siyah ve beyaz renk seçeneklerimiz mevcut.", sender: "user", time: "14:23" },
+        { text: "Stokta başka renk seçeneği var mı?", sender: "other" as const, time: "14:20" },
+        { text: "Hangi ürün için soruyorsunuz?", sender: "user" as const, time: "14:21" },
+        { text: "Tansiyon aleti için", sender: "other" as const, time: "14:22" },
+        { text: "Siyah ve beyaz renk seçeneklerimiz mevcut.", sender: "user" as const, time: "14:23" },
       ]
     },
     {
@@ -58,10 +58,10 @@ const Messages = () => {
       time: "15:15",
       isRead: false,
       conversation: [
-        { text: "Fiyat konusunda indirim yapabilir misiniz?", sender: "other", time: "15:15" },
-        { text: "Hangi ürünler için indirim istiyorsunuz?", sender: "user", time: "15:16" },
-        { text: "Vitamin takviyeleri için", sender: "other", time: "15:17" },
-        { text: "Toplu alımlarda %10 indirim yapabiliriz.", sender: "user", time: "15:18" },
+        { text: "Fiyat konusunda indirim yapabilir misiniz?", sender: "other" as const, time: "15:15" },
+        { text: "Hangi ürünler için indirim istiyorsunuz?", sender: "user" as const, time: "15:16" },
+        { text: "Vitamin takviyeleri için", sender: "other" as const, time: "15:17" },
+        { text: "Toplu alımlarda %10 indirim yapabiliriz.", sender: "user" as const, time: "15:18" },
       ]
     },
   ];
