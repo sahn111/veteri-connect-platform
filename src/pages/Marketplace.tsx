@@ -56,18 +56,20 @@ const Marketplace = () => {
   return (
     <CartProvider>
       <DashboardLayout>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold">Veteriner İlaç Pazarı</h1>
-            <p className="text-gray-600 mt-2">
+        <div className="container mx-auto px-4 py-8">
+          <div className="mb-8 space-y-2">
+            <h1 className="text-3xl font-bold text-primary">Veteriner İlaç Pazarı</h1>
+            <p className="text-muted-foreground">
               Veteriner hekimlerin paylaştığı ilaçları keşfedin
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div className="lg:col-span-3">
-              <SearchBar />
-              <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="lg:col-span-3 space-y-6">
+              <div className="bg-white rounded-lg shadow-sm p-4">
+                <SearchBar />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {MOCK_MEDICINES.map((medicine) => (
                   <MedicineCard key={medicine.id} medicine={medicine} />
                 ))}

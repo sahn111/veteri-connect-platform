@@ -40,39 +40,44 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
   };
 
   return (
-    <Card className="hover:shadow-lg transition-all duration-200">
-      <CardHeader>
-        <CardTitle className="text-lg">{medicine.name}</CardTitle>
+    <Card className="bg-white hover:shadow-lg transition-all duration-200 animate-fade-up">
+      <CardHeader className="space-y-2">
+        <CardTitle className="text-xl font-semibold text-primary">{medicine.name}</CardTitle>
+        <p className="text-sm text-muted-foreground">{medicine.description}</p>
       </CardHeader>
       <CardContent>
-        <p className="text-gray-600 mb-4">{medicine.description}</p>
-        <div className="space-y-2 text-sm text-gray-500">
-          <div className="flex items-center">
-            <Package className="h-4 w-4 mr-2" />
-            {medicine.quantity} {medicine.unit} mevcut
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <Package className="h-4 w-4 text-primary" />
+              <span>{medicine.quantity} {medicine.unit} mevcut</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-primary" />
+              <span>Son Kullanma: {new Date(medicine.expiryDate).toLocaleDateString()}</span>
+            </div>
           </div>
-          <div className="flex items-center">
-            <Calendar className="h-4 w-4 mr-2" />
-            Son Kullanma: {new Date(medicine.expiryDate).toLocaleDateString()}
-          </div>
-          <div className="flex items-center">
-            <User className="h-4 w-4 mr-2" />
-            {medicine.seller.name}
-          </div>
-          <div className="flex items-center">
-            <MapPin className="h-4 w-4 mr-2" />
-            {medicine.seller.location}
+          <div className="space-y-2 border-t pt-4 mt-4">
+            <div className="flex items-center gap-2">
+              <User className="h-4 w-4 text-primary" />
+              <span className="text-sm">{medicine.seller.name}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-primary" />
+              <span className="text-sm">{medicine.seller.location}</span>
+            </div>
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between items-center">
-        <span className="text-lg font-semibold">{medicine.price.toLocaleString('tr-TR')} ₺</span>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center border rounded-md">
+      <CardFooter className="flex flex-col sm:flex-row gap-4 items-center justify-between border-t pt-4">
+        <span className="text-xl font-bold text-primary">{medicine.price.toLocaleString('tr-TR')} ₺</span>
+        <div className="flex flex-wrap gap-2 items-center justify-end">
+          <div className="flex items-center border rounded-md bg-muted">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              className="h-8 w-8"
             >
               <Minus className="h-4 w-4" />
             </Button>
@@ -81,11 +86,14 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
               variant="ghost"
               size="icon"
               onClick={() => setQuantity(quantity + 1)}
+              className="h-8 w-8"
             >
               <Plus className="h-4 w-4" />
             </Button>
           </div>
-          <Button onClick={handleAddToCart}>Sepete Ekle</Button>
+          <Button onClick={handleAddToCart} className="bg-primary hover:bg-primary-dark">
+            Sepete Ekle
+          </Button>
           <Link to={`/dashboard/marketplace/${medicine.id}`}>
             <Button variant="outline">Detayları Gör</Button>
           </Link>
