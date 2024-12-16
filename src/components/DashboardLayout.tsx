@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Sidebar } from "./Sidebar";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingCart } from "lucide-react";
 import { Button } from "./ui/button";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Cart } from "./cart/Cart";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -9,6 +11,7 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
     <div className="flex h-screen relative">
@@ -47,6 +50,22 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           {children}
         </div>
       </main>
+
+      {/* Cart Button */}
+      <Button
+        className="fixed bottom-8 right-8 h-16 w-16 rounded-full shadow-lg z-50 bg-primary hover:bg-primary-dark"
+        size="icon"
+        onClick={() => setIsCartOpen(true)}
+      >
+        <ShoppingCart className="h-8 w-8" />
+      </Button>
+
+      {/* Cart Sheet */}
+      <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
+        <SheetContent side="right" className="w-full sm:max-w-[600px] p-0">
+          <Cart />
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
