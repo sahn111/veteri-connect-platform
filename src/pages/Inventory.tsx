@@ -1,6 +1,7 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -10,8 +11,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { Package, Search, AlertTriangle } from "lucide-react";
+import { Package, Search, AlertTriangle, Edit, Save, X } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 // Mock data - gerçek uygulamada API'den gelecek
 const MOCK_INVENTORY = [
@@ -22,6 +24,7 @@ const MOCK_INVENTORY = [
     unit: "tablet",
     minStock: 20,
     expiryDate: "2024-12-31",
+    isActive: true,
   },
   {
     id: 2,
@@ -30,6 +33,7 @@ const MOCK_INVENTORY = [
     unit: "ampul",
     minStock: 10,
     expiryDate: "2024-06-30",
+    isActive: true,
   },
   {
     id: 3,
@@ -38,24 +42,52 @@ const MOCK_INVENTORY = [
     unit: "tüp",
     minStock: 5,
     expiryDate: "2024-09-15",
+    isActive: false,
   },
 ];
 
 const Inventory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [inventory, setInventory] = useState(MOCK_INVENTORY);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editedItem, setEditedItem] = useState<any>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleUpdateStock = (id: number, newQuantity: number) => {
-    setInventory(
-      inventory.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
+  const handleEdit = (item: any) => {
+    setEditingId(item.id);
+    setEditedItem({ ...item });
+  };
+
+  const handleSave = () => {
+    if (!editedItem) return;
+
+    setInventory(inventory.map((item) => 
+      item.id === editedItem.id ? editedItem : item
+    ));
+    
+    setEditingId(null);
+    setEditedItem(null);
 
     toast({
-      title: "Stok güncellendi",
-      description: "İlaç stoğu başarıyla güncellendi.",
+      title: "Başarılı",
+      description: "Ürün bilgileri güncellendi.",
+    });
+  };
+
+  const handleCancel = () => {
+    setEditingId(null);
+    setEditedItem(null);
+  };
+
+  const handleStatusChange = (id: number, isActive: boolean) => {
+    setInventory(inventory.map((item) => 
+      item.id === id ? { ...item, isActive } : item
+    ));
+
+    toast({
+      title: "Başarılı",
+      description: `Ürün durumu ${isActive ? 'aktif' : 'pasif'} olarak güncellendi.`,
     });
   };
 
@@ -68,7 +100,7 @@ const Inventory = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold">Stok Takibi</h1>
-          <Button>
+          <Button onClick={() => navigate("/dashboard/marketplace/add")}>
             <Package className="mr-2 h-4 w-4" />
             Yeni Ürün Ekle
           </Button>
@@ -99,28 +131,110 @@ const Inventory = () => {
             <TableBody>
               {filteredInventory.map((item) => (
                 <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.name}</TableCell>
                   <TableCell>
-                    {item.quantity} {item.unit}
-                  </TableCell>
-                  <TableCell>{item.minStock} {item.unit}</TableCell>
-                  <TableCell>{new Date(item.expiryDate).toLocaleDateString()}</TableCell>
-                  <TableCell>
-                    {item.quantity <= item.minStock && (
-                      <div className="flex items-center text-yellow-600">
-                        <AlertTriangle className="w-4 h-4 mr-1" />
-                        Düşük Stok
-                      </div>
+                    {editingId === item.id ? (
+                      <Input
+                        value={editedItem.name}
+                        onChange={(e) =>
+                          setEditedItem({ ...editedItem, name: e.target.value })
+                        }
+                      />
+                    ) : (
+                      <span className="font-medium">{item.name}</span>
                     )}
                   </TableCell>
+                  <TableCell>
+                    {editingId === item.id ? (
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          type="number"
+                          value={editedItem.quantity}
+                          onChange={(e) =>
+                            setEditedItem({
+                              ...editedItem,
+                              quantity: parseInt(e.target.value),
+                            })
+                          }
+                          className="w-20"
+                        />
+                        <Input
+                          value={editedItem.unit}
+                          onChange={(e) =>
+                            setEditedItem({ ...editedItem, unit: e.target.value })
+                          }
+                          className="w-20"
+                        />
+                      </div>
+                    ) : (
+                      `${item.quantity} ${item.unit}`
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editingId === item.id ? (
+                      <Input
+                        type="number"
+                        value={editedItem.minStock}
+                        onChange={(e) =>
+                          setEditedItem({
+                            ...editedItem,
+                            minStock: parseInt(e.target.value),
+                          })
+                        }
+                      />
+                    ) : (
+                      `${item.minStock} ${item.unit}`
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editingId === item.id ? (
+                      <Input
+                        type="date"
+                        value={editedItem.expiryDate}
+                        onChange={(e) =>
+                          setEditedItem({
+                            ...editedItem,
+                            expiryDate: e.target.value,
+                          })
+                        }
+                      />
+                    ) : (
+                      new Date(item.expiryDate).toLocaleDateString()
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={item.isActive}
+                        onCheckedChange={(checked) =>
+                          handleStatusChange(item.id, checked)
+                        }
+                      />
+                      <span>{item.isActive ? "Aktif" : "Pasif"}</span>
+                    </div>
+                  </TableCell>
                   <TableCell className="text-right">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleUpdateStock(item.id, item.quantity + 1)}
-                    >
-                      Stok Güncelle
-                    </Button>
+                    {editingId === item.id ? (
+                      <div className="flex justify-end space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleCancel}
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" onClick={handleSave}>
+                          <Save className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEdit(item)}
+                      >
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
