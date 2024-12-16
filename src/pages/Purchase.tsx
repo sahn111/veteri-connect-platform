@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CreditCard, Package, Truck } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -12,6 +12,12 @@ const Purchase = () => {
   const { items, total, clearCart } = useCart();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (items.length === 0) {
+      navigate("/dashboard/marketplace");
+    }
+  }, [items.length, navigate]);
 
   const handlePurchase = () => {
     setLoading(true);
@@ -23,10 +29,7 @@ const Purchase = () => {
     }, 2000);
   };
 
-  if (items.length === 0) {
-    navigate("/dashboard/marketplace");
-    return null;
-  }
+  if (items.length === 0) return null;
 
   return (
     <DashboardLayout>
