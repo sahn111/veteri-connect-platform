@@ -42,8 +42,12 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
   return (
     <Card className="flex flex-col h-full bg-white hover:shadow-lg transition-all duration-200 animate-fade-up">
       <CardHeader className="flex-none space-y-2">
-        <CardTitle className="text-xl font-semibold text-primary line-clamp-2">{medicine.name}</CardTitle>
-        <p className="text-sm text-muted-foreground line-clamp-2">{medicine.description}</p>
+        <CardTitle className="text-xl font-semibold text-primary line-clamp-2">
+          {medicine.name}
+        </CardTitle>
+        <p className="text-sm text-muted-foreground line-clamp-2">
+          {medicine.description}
+        </p>
       </CardHeader>
       
       <CardContent className="flex-grow">
@@ -72,36 +76,49 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
         </div>
       </CardContent>
       
-      <CardFooter className="flex-none flex flex-col sm:flex-row gap-4 items-center justify-between border-t pt-4">
-        <span className="text-xl font-bold text-primary whitespace-nowrap">
-          {medicine.price.toLocaleString('tr-TR')} ₺
-        </span>
-        <div className="flex flex-wrap gap-2 items-center justify-end">
-          <div className="flex items-center border rounded-md bg-muted">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="h-8 w-8"
-            >
-              <Minus className="h-4 w-4" />
-            </Button>
-            <span className="w-8 text-center">{quantity}</span>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setQuantity(quantity + 1)}
-              className="h-8 w-8"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
+      <CardFooter className="flex-none border-t pt-4 space-y-4">
+        <div className="w-full space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xl font-bold text-primary whitespace-nowrap">
+              {medicine.price.toLocaleString('tr-TR')} ₺
+            </span>
+            <div className="flex items-center border rounded-md bg-muted">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                className="h-8 w-8"
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+              <span className="w-8 text-center">{quantity}</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setQuantity(quantity + 1)}
+                className="h-8 w-8"
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
-          <Button onClick={handleAddToCart} className="bg-primary hover:bg-primary-dark whitespace-nowrap">
-            Sepete Ekle
-          </Button>
-          <Link to={`/dashboard/marketplace/${medicine.id}`}>
-            <Button variant="outline" className="whitespace-nowrap">Detayları Gör</Button>
-          </Link>
+          
+          <div className="flex flex-col sm:flex-row gap-3 w-full">
+            <Button 
+              onClick={handleAddToCart} 
+              className="flex-1 bg-primary hover:bg-primary-dark text-white"
+            >
+              Sepete Ekle
+            </Button>
+            <Link to={`/dashboard/marketplace/${medicine.id}`} className="flex-1">
+              <Button 
+                variant="outline" 
+                className="w-full border-primary text-primary hover:bg-primary/10"
+              >
+                Detayları Gör
+              </Button>
+            </Link>
+          </div>
         </div>
       </CardFooter>
     </Card>

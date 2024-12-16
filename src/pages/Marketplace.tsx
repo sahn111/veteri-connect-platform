@@ -62,7 +62,7 @@ const Marketplace = () => {
   return (
     <CartProvider>
       <DashboardLayout>
-        <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="max-w-[1920px] mx-auto space-y-8">
           <div className="mb-8">
             <h1 className="text-2xl lg:text-3xl font-bold text-primary">Veteriner İlaç Pazarı</h1>
             <p className="text-muted-foreground text-sm lg:text-base mt-2">
@@ -70,7 +70,7 @@ const Marketplace = () => {
             </p>
           </div>
           
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="bg-white rounded-lg shadow-sm p-4">
               <SearchBar />
             </div>
@@ -83,7 +83,6 @@ const Marketplace = () => {
           </div>
         </div>
 
-        {/* Cart Button */}
         <Button
           className="fixed bottom-8 right-8 h-14 w-14 rounded-full shadow-lg z-50 bg-primary hover:bg-primary-dark"
           size="icon"
@@ -92,7 +91,6 @@ const Marketplace = () => {
           <ShoppingCart className="h-6 w-6" />
         </Button>
 
-        {/* Cart Sheet */}
         <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
           <SheetContent side="right" className="w-full sm:max-w-[600px] p-0">
             <Cart />
