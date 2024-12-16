@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Marketplace from "./pages/Marketplace";
+import MedicineDetails from "./pages/MedicineDetails";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/marketplace" element={<Marketplace />} />
+          <Route path="/dashboard/marketplace/:id" element={<MedicineDetails />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Package } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Medicine {
   id: number;
@@ -37,7 +38,9 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
       </CardContent>
       <CardFooter className="flex justify-between items-center">
         <span className="text-lg font-semibold">${medicine.price}</span>
-        <Button variant="outline">View Details</Button>
+        <Link to={`/dashboard/marketplace/${medicine.id}`}>
+          <Button variant="outline">View Details</Button>
+        </Link>
       </CardFooter>
     </Card>
   );
