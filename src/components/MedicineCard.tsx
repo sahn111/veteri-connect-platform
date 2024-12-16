@@ -11,6 +11,7 @@ interface Medicine {
   quantity: number;
   unit: string;
   expiryDate: string;
+  isActive: boolean;
 }
 
 interface MedicineCardProps {
@@ -19,9 +20,18 @@ interface MedicineCardProps {
 
 export const MedicineCard = ({ medicine }: MedicineCardProps) => {
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className={`hover:shadow-md transition-shadow ${!medicine.isActive ? 'opacity-60' : ''}`}>
       <CardHeader>
-        <CardTitle className="text-lg">{medicine.name}</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-lg">{medicine.name}</CardTitle>
+          <span className={`text-sm px-2 py-1 rounded-full ${
+            medicine.isActive 
+              ? 'bg-green-100 text-green-800' 
+              : 'bg-gray-100 text-gray-800'
+          }`}>
+            {medicine.isActive ? 'Aktif' : 'Pasif'}
+          </span>
+        </div>
       </CardHeader>
       <CardContent>
         <p className="text-gray-600 mb-4">{medicine.description}</p>
