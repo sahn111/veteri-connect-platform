@@ -1,6 +1,8 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { SearchBar } from "@/components/SearchBar";
 import { MedicineCard } from "@/components/MedicineCard";
+import { CartProvider } from "@/components/cart/CartProvider";
+import { Cart } from "@/components/cart/Cart";
 
 const MOCK_MEDICINES = [
   {
@@ -52,24 +54,34 @@ const MOCK_MEDICINES = [
 
 const Marketplace = () => {
   return (
-    <DashboardLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold">Veteriner İlaç Pazarı</h1>
-          <p className="text-gray-600 mt-2">
-            Veteriner hekimlerin paylaştığı ilaçları keşfedin
-          </p>
+    <CartProvider>
+      <DashboardLayout>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold">Veteriner İlaç Pazarı</h1>
+            <p className="text-gray-600 mt-2">
+              Veteriner hekimlerin paylaştığı ilaçları keşfedin
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-3">
+              <SearchBar />
+              <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
+                {MOCK_MEDICINES.map((medicine) => (
+                  <MedicineCard key={medicine.id} medicine={medicine} />
+                ))}
+              </div>
+            </div>
+            <div className="lg:col-span-1">
+              <div className="sticky top-6">
+                <Cart />
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <SearchBar />
-        
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {MOCK_MEDICINES.map((medicine) => (
-            <MedicineCard key={medicine.id} medicine={medicine} />
-          ))}
-        </div>
-      </div>
-    </DashboardLayout>
+      </DashboardLayout>
+    </CartProvider>
   );
 };
 
