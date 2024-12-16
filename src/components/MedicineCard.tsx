@@ -40,7 +40,7 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
   };
 
   return (
-    <Card className="w-full max-w-md bg-white hover:shadow-lg transition-all duration-200 animate-fade-up">
+    <Card className="w-full max-w-[400px] bg-white hover:shadow-lg transition-all duration-200 animate-fade-up">
       <CardHeader className="space-y-4 p-6">
         <CardTitle className="text-2xl font-bold text-primary">
           {medicine.name}
@@ -74,12 +74,12 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
         </div>
       </CardContent>
       
-      <CardFooter className="flex flex-col space-y-4 border-t p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4">
+      <CardFooter className="flex flex-col space-y-6 border-t p-6">
+        <div className="flex flex-col space-y-4 w-full">
           <span className="text-2xl font-bold text-primary">
             {medicine.price.toLocaleString('tr-TR')} ₺
           </span>
-          <div className="flex items-center border rounded-lg bg-muted/50">
+          <div className="flex items-center border rounded-lg bg-muted/50 w-fit">
             <Button
               variant="ghost"
               size="icon"

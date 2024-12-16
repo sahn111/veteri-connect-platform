@@ -63,8 +63,8 @@ const Marketplace = () => {
     <CartProvider>
       <DashboardLayout>
         <div className="min-h-screen bg-muted/30 py-8">
-          <div className="container mx-auto px-4 max-w-7xl space-y-8">
-            <div className="text-center space-y-4">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1400px]">
+            <div className="text-center space-y-4 mb-8">
               <h1 className="text-3xl lg:text-4xl font-bold text-primary">
                 Veteriner İlaç Pazarı
               </h1>
@@ -73,17 +73,15 @@ const Marketplace = () => {
               </p>
             </div>
             
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-3xl mx-auto mb-12">
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <SearchBar />
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-stretch justify-items-center">
               {MOCK_MEDICINES.map((medicine) => (
-                <div key={medicine.id} className="flex justify-center">
-                  <MedicineCard medicine={medicine} />
-                </div>
+                <MedicineCard key={medicine.id} medicine={medicine} />
               ))}
             </div>
           </div>
