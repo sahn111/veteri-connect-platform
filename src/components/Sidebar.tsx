@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { User, ShoppingCart, MessageSquare, Settings, LogOut } from "lucide-react";
+import { User, ShoppingCart, MessageSquare, Settings, LogOut, Package } from "lucide-react";
 import { Button } from "./ui/button";
 
 export const Sidebar = () => {
@@ -23,6 +23,12 @@ export const Sidebar = () => {
             <Button variant="ghost" className="w-full justify-start">
               <ShoppingCart className="mr-2 h-4 w-4" />
               Pazar Yeri
+            </Button>
+          </Link>
+          <Link to="/dashboard/inventory">
+            <Button variant="ghost" className="w-full justify-start">
+              <Package className="mr-2 h-4 w-4" />
+              Stok Takibi
             </Button>
           </Link>
           <Link to="/dashboard/messages">

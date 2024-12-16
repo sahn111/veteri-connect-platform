@@ -13,6 +13,7 @@ import MedicineDetails from "./pages/MedicineDetails";
 import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import Inventory from "./pages/Inventory";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/dashboard/messages" element={<Messages />} />
           <Route path="/dashboard/profile" element={<Profile />} />
           <Route path="/dashboard/settings" element={<Settings />} />
+          <Route path="/dashboard/inventory" element={<Inventory />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
