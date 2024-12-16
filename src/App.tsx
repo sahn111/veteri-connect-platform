@@ -18,6 +18,8 @@ import Inventory from "./pages/Inventory";
 import SellerProfile from "./pages/SellerProfile";
 import Purchase from "./pages/Purchase";
 import Walkthrough from "./pages/Walkthrough";
+import ReceivedOrders from "./pages/ReceivedOrders";
+import PlacedOrders from "./pages/PlacedOrders";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +45,8 @@ const App = () => (
             <Route path="/dashboard/settings" element={<Settings />} />
             <Route path="/dashboard/inventory" element={<Inventory />} />
             <Route path="/dashboard/purchase" element={<Purchase />} />
+            <Route path="/dashboard/orders/received" element={<ReceivedOrders />} />
+            <Route path="/dashboard/orders/placed" element={<PlacedOrders />} />
           </Routes>
         </BrowserRouter>
       </CartProvider>
