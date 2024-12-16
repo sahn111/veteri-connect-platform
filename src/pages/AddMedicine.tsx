@@ -1,4 +1,5 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { BackButton } from "@/components/BackButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -55,6 +56,7 @@ const AddMedicine = () => {
   return (
     <DashboardLayout>
       <div className="max-w-2xl mx-auto">
+        <BackButton />
         <h1 className="text-2xl font-bold mb-6">Yeni İlaç Ekle</h1>
 
         <Form {...form}>

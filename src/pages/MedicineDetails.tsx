@@ -1,4 +1,5 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { BackButton } from "@/components/BackButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Package, DollarSign, User, MessageSquare } from "lucide-react";
@@ -28,6 +29,7 @@ const MedicineDetails = () => {
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto">
+        <BackButton />
         <div className="mb-6">
           <h1 className="text-3xl font-bold mb-2">{medicine.name}</h1>
           <p className="text-gray-600">{medicine.description}</p>

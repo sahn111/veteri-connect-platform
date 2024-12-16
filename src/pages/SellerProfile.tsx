@@ -1,4 +1,5 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { BackButton } from "@/components/BackButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MedicineCard } from "@/components/MedicineCard";
@@ -56,6 +57,7 @@ const SellerProfile = () => {
   return (
     <DashboardLayout>
       <div className="max-w-7xl mx-auto space-y-6">
+        <BackButton />
         <div className="grid md:grid-cols-3 gap-6">
           {/* Satıcı Bilgileri */}
           <div className="md:col-span-1 space-y-6">

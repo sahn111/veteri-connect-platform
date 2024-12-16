@@ -1,6 +1,7 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { BackButton } from "@/components/BackButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MessageSquare, User, X } from "lucide-react";
+import { MessageSquare, User } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useState } from "react";
@@ -76,6 +77,7 @@ const Messages = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
+        <BackButton />
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Mesajlar</h1>
         </div>

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { BackButton } from "@/components/BackButton";
 import {
   ArrowRight,
   ShoppingCart,
@@ -14,6 +14,7 @@ const Walkthrough = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-muted to-white">
       <div className="container mx-auto px-4 py-16">
+        <BackButton />
         <h1 className="text-4xl font-bold text-center mb-12">
           VetMedEx Nasıl Çalışır?
         </h1>
