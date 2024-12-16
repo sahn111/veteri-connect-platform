@@ -62,7 +62,7 @@ const Marketplace = () => {
   return (
     <CartProvider>
       <DashboardLayout>
-        <div className="max-w-[1920px] mx-auto space-y-8">
+        <div className="container mx-auto px-4 lg:px-8 xl:px-16 max-w-[1920px] space-y-8">
           <div className="mb-8">
             <h1 className="text-2xl lg:text-3xl font-bold text-primary">Veteriner İlaç Pazarı</h1>
             <p className="text-muted-foreground text-sm lg:text-base mt-2">
@@ -75,7 +75,7 @@ const Marketplace = () => {
               <SearchBar />
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8 justify-items-center">
               {MOCK_MEDICINES.map((medicine) => (
                 <MedicineCard key={medicine.id} medicine={medicine} />
               ))}
