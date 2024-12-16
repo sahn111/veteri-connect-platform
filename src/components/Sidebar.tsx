@@ -30,18 +30,6 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
         </div>
         
         <nav className="space-y-2 flex-1">
-          <Link to="/dashboard/profile" onClick={handleLinkClick}>
-            <Button 
-              variant={isActive("/dashboard/profile") ? "secondary" : "ghost"}
-              className={cn(
-                "w-full justify-start",
-                isActive("/dashboard/profile") && "bg-primary/10"
-              )}
-            >
-              <User className="mr-2 h-4 w-4" />
-              Profil
-            </Button>
-          </Link>
           <Link to="/dashboard/marketplace" onClick={handleLinkClick}>
             <Button 
               variant={isActive("/dashboard/marketplace") ? "secondary" : "ghost"}
@@ -92,14 +80,29 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
           </Link>
         </nav>
 
-        <Button 
-          variant="ghost" 
-          className="w-full justify-start mt-auto text-red-500 hover:text-red-600 hover:bg-red-50"
-          onClick={handleLinkClick}
-        >
-          <LogOut className="mr-2 h-4 w-4" />
-          Çıkış Yap
-        </Button>
+        <div className="mt-auto space-y-2">
+          <Link to="/dashboard/profile" onClick={handleLinkClick}>
+            <Button 
+              variant={isActive("/dashboard/profile") ? "secondary" : "ghost"}
+              size="sm"
+              className={cn(
+                "w-full justify-start",
+                isActive("/dashboard/profile") && "bg-primary/10"
+              )}
+            >
+              <User className="mr-2 h-3 w-3" />
+              Profil
+            </Button>
+          </Link>
+          <Button 
+            variant="ghost" 
+            className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50"
+            onClick={handleLinkClick}
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            Çıkış Yap
+          </Button>
+        </div>
       </div>
     </div>
   );
