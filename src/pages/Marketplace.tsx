@@ -3,6 +3,7 @@ import { MedicineList } from "@/components/MedicineList";
 import { SearchBar } from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Marketplace = () => {
   return (
@@ -10,10 +11,12 @@ const Marketplace = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Pazar Yeri</h1>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            İlaç Ekle
-          </Button>
+          <Link to="/dashboard/marketplace/add">
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              İlaç Ekle
+            </Button>
+          </Link>
         </div>
         
         <SearchBar />

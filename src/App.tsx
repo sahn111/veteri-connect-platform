@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Marketplace from "./pages/Marketplace";
+import AddMedicine from "./pages/AddMedicine";
 import MedicineDetails from "./pages/MedicineDetails";
 import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/marketplace" element={<Marketplace />} />
+          <Route path="/dashboard/marketplace/add" element={<AddMedicine />} />
           <Route path="/dashboard/marketplace/:id" element={<MedicineDetails />} />
           <Route path="/dashboard/messages" element={<Messages />} />
           <Route path="/dashboard/profile" element={<Profile />} />
