@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
   return (
@@ -14,13 +15,17 @@ export const Hero = () => {
             Güvenilir profesyonel topluluğumuza bugün katılın.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-up">
-            <Button size="lg" className="group">
-              Başlayın
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button size="lg" variant="outline">
-              Daha Fazla Bilgi
-            </Button>
+            <Link to="/walkthrough">
+              <Button size="lg" className="group">
+                Başlayın
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+            <Link to="/walkthrough">
+              <Button size="lg" variant="outline">
+                Daha Fazla Bilgi
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

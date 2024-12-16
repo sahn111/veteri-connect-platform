@@ -17,6 +17,7 @@ import Settings from "./pages/Settings";
 import Inventory from "./pages/Inventory";
 import SellerProfile from "./pages/SellerProfile";
 import Purchase from "./pages/Purchase";
+import Walkthrough from "./pages/Walkthrough";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/walkthrough" element={<Walkthrough />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/marketplace" element={<Marketplace />} />
             <Route path="/dashboard/marketplace/add" element={<AddMedicine />} />
