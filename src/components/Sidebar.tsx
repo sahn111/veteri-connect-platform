@@ -16,32 +16,32 @@ export const Sidebar = () => {
           <Link to="/dashboard/profile">
             <Button variant="ghost" className="w-full justify-start">
               <User className="mr-2 h-4 w-4" />
-              Profile
+              Profil
             </Button>
           </Link>
           <Link to="/dashboard/marketplace">
             <Button variant="ghost" className="w-full justify-start">
               <ShoppingCart className="mr-2 h-4 w-4" />
-              Marketplace
+              Pazar Yeri
             </Button>
           </Link>
           <Link to="/dashboard/messages">
             <Button variant="ghost" className="w-full justify-start">
               <MessageSquare className="mr-2 h-4 w-4" />
-              Messages
+              Mesajlar
             </Button>
           </Link>
           <Link to="/dashboard/settings">
             <Button variant="ghost" className="w-full justify-start">
               <Settings className="mr-2 h-4 w-4" />
-              Settings
+              Ayarlar
             </Button>
           </Link>
         </nav>
 
         <Button variant="ghost" className="w-full justify-start mt-auto text-red-500 hover:text-red-600 hover:bg-red-50">
           <LogOut className="mr-2 h-4 w-4" />
-          Logout
+          Çıkış Yap
         </Button>
       </div>
     </div>

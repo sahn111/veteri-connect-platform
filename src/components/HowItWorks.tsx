@@ -3,18 +3,18 @@ import { ClipboardList, HandshakeIcon, ShieldCheck } from "lucide-react";
 const steps = [
   {
     icon: ClipboardList,
-    title: "List Your Medicines",
-    description: "Easily list your available medicines with detailed information including expiry dates and quantities."
+    title: "İlaçlarınızı Listeleyin",
+    description: "Son kullanma tarihleri ve miktarlar dahil olmak üzere mevcut ilaçlarınızı kolayca listeleyin."
   },
   {
     icon: HandshakeIcon,
-    title: "Connect & Exchange",
-    description: "Connect with verified veterinarians in your area and arrange medicine exchanges securely."
+    title: "Bağlantı Kurun ve Takas Yapın",
+    description: "Bölgenizdeki doğrulanmış veteriner hekimlerle bağlantı kurun ve güvenli ilaç takası düzenleyin."
   },
   {
     icon: ShieldCheck,
-    title: "Secure Transaction",
-    description: "Complete transactions safely with our verified platform ensuring compliance and security."
+    title: "Güvenli İşlem",
+    description: "Uyumluluk ve güvenliği sağlayan doğrulanmış platformumuzla işlemlerinizi güvenle tamamlayın."
   }
 ];
 
@@ -22,7 +22,7 @@ export const HowItWorks = () => {
   return (
     <section id="how-it-works" className="py-20 bg-muted">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
+        <h2 className="text-3xl font-bold text-center mb-12">Nasıl Çalışır</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {steps.map((step, index) => (
             <div

@@ -7,19 +7,19 @@ export const Hero = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 animate-fade-up">
-            Streamline Your Veterinary Medicine Exchange
+            Veteriner İlaç Takasını Kolaylaştırın
           </h1>
           <p className="text-xl text-gray-600 mb-8 animate-fade-up">
-            A secure platform for veterinarians to exchange medicines efficiently and safely.
-            Join our trusted community of professionals today.
+            Veteriner hekimler için güvenli ve verimli ilaç takası platformu.
+            Güvenilir profesyonel topluluğumuza bugün katılın.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-up">
             <Button size="lg" className="group">
-              Get Started
+              Başlayın
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button size="lg" variant="outline">
-              Learn More
+              Daha Fazla Bilgi
             </Button>
           </div>
         </div>

@@ -32,14 +32,14 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
           </div>
           <div className="flex items-center">
             <Calendar className="h-4 w-4 mr-2" />
-            Expires: {new Date(medicine.expiryDate).toLocaleDateString()}
+            Son Kullanma: {new Date(medicine.expiryDate).toLocaleDateString()}
           </div>
         </div>
       </CardContent>
       <CardFooter className="flex justify-between items-center">
-        <span className="text-lg font-semibold">${medicine.price}</span>
+        <span className="text-lg font-semibold">{medicine.price} ₺</span>
         <Link to={`/dashboard/marketplace/${medicine.id}`}>
-          <Button variant="outline">View Details</Button>
+          <Button variant="outline">Detayları Gör</Button>
         </Link>
       </CardFooter>
     </Card>

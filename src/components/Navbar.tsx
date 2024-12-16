@@ -16,13 +16,13 @@ export const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-600 hover:text-primary">Features</a>
-            <a href="#how-it-works" className="text-gray-600 hover:text-primary">How it Works</a>
+            <a href="#features" className="text-gray-600 hover:text-primary">Özellikler</a>
+            <a href="#how-it-works" className="text-gray-600 hover:text-primary">Nasıl Çalışır</a>
             <Link to="/login">
-              <Button variant="outline" className="mr-2">Sign In</Button>
+              <Button variant="outline" className="mr-2">Giriş Yap</Button>
             </Link>
             <Link to="/register">
-              <Button>Register</Button>
+              <Button>Kayıt Ol</Button>
             </Link>
           </div>
 
@@ -41,13 +41,13 @@ export const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden pb-4 animate-fade-up">
             <div className="flex flex-col space-y-4">
-              <a href="#features" className="text-gray-600 hover:text-primary px-2 py-1">Features</a>
-              <a href="#how-it-works" className="text-gray-600 hover:text-primary px-2 py-1">How it Works</a>
+              <a href="#features" className="text-gray-600 hover:text-primary px-2 py-1">Özellikler</a>
+              <a href="#how-it-works" className="text-gray-600 hover:text-primary px-2 py-1">Nasıl Çalışır</a>
               <Link to="/login">
-                <Button variant="outline" className="w-full mb-2">Sign In</Button>
+                <Button variant="outline" className="w-full mb-2">Giriş Yap</Button>
               </Link>
               <Link to="/register">
-                <Button className="w-full">Register</Button>
+                <Button className="w-full">Kayıt Ol</Button>
               </Link>
             </div>
           </div>

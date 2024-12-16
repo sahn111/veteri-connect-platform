@@ -3,18 +3,18 @@ import { Shield, RefreshCcw, Users } from "lucide-react";
 const features = [
   {
     icon: Shield,
-    title: "Secure Exchange",
-    description: "Verified platform ensuring safe and compliant medicine exchange between licensed veterinarians."
+    title: "Güvenli Takas",
+    description: "Lisanslı veteriner hekimler arasında güvenli ve uyumlu ilaç takası sağlayan doğrulanmış platform."
   },
   {
     icon: RefreshCcw,
-    title: "Efficient Process",
-    description: "Streamlined system for quick and easy medicine listing, discovery, and exchange."
+    title: "Verimli Süreç",
+    description: "Hızlı ve kolay ilaç listeleme, keşfetme ve takas için optimize edilmiş sistem."
   },
   {
     icon: Users,
-    title: "Trusted Community",
-    description: "Join a network of verified veterinary professionals committed to ethical practice."
+    title: "Güvenilir Topluluk",
+    description: "Etik uygulamaya bağlı doğrulanmış veteriner profesyonelleri ağına katılın."
   }
 ];
 
@@ -22,7 +22,7 @@ export const Features = () => {
   return (
     <section id="features" className="py-20 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">Why Choose VetMedEx?</h2>
+        <h2 className="text-3xl font-bold text-center mb-12">Neden VetMedEx?</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <div
