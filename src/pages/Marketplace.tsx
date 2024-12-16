@@ -58,6 +58,7 @@ const MOCK_MEDICINES = [
 
 const Marketplace = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isDesktopCartVisible, setIsDesktopCartVisible] = useState(true);
 
   return (
     <CartProvider>
@@ -82,9 +83,22 @@ const Marketplace = () => {
               </div>
             </div>
 
+            {/* Desktop Cart Toggle Button */}
+            <Button
+              variant="outline"
+              size="sm"
+              className="hidden lg:flex fixed top-4 right-4 z-30 items-center gap-2"
+              onClick={() => setIsDesktopCartVisible(!isDesktopCartVisible)}
+            >
+              <ShoppingCart className="h-4 w-4" />
+              {isDesktopCartVisible ? "Sepeti Gizle" : "Sepeti Göster"}
+            </Button>
+
             {/* Desktop Cart */}
-            <div className="hidden lg:block lg:col-span-1">
-              <div className="sticky top-6">
+            <div className={`hidden lg:block lg:col-span-1 transition-all duration-300 ${
+              isDesktopCartVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
+            }`}>
+              <div className="sticky top-16">
                 <Cart />
               </div>
             </div>
