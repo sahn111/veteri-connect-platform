@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UserPlus, Lock } from "lucide-react";
+import { UserPlus, Lock, ArrowLeft } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -30,6 +31,10 @@ const Register = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md mx-auto">
+        <Link to="/" className="inline-flex items-center text-primary hover:text-primary/80 mb-6">
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Ana Sayfaya Dön
+        </Link>
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-900">Create your account</h2>
           <p className="mt-2 text-gray-600">Join our trusted veterinary community</p>
