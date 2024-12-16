@@ -8,72 +8,72 @@ export const Cart = () => {
 
   if (items.length === 0) {
     return (
-      <Card>
+      <div className="h-full flex flex-col">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <ShoppingCart className="h-5 w-5" />
             Sepetim
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex-1 flex items-center justify-center">
           <p className="text-gray-500">Sepetiniz boş</p>
         </CardContent>
-      </Card>
+      </div>
     );
   }
 
   return (
-    <Card className="max-h-[calc(100vh-8rem)] flex flex-col">
+    <div className="h-full flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <ShoppingCart className="h-5 w-5" />
           Sepetim ({items.length} ürün)
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4 overflow-y-auto flex-grow">
+      <CardContent className="space-y-6 flex-1 overflow-y-auto">
         {items.map((item) => (
-          <div key={item.id} className="flex items-center gap-4 border-b pb-4">
+          <div key={item.id} className="flex items-center gap-4 border-b pb-6">
             <div className="flex-grow min-w-0">
-              <h3 className="font-medium text-sm truncate">{item.name}</h3>
-              <p className="text-sm text-gray-500">{item.price.toLocaleString('tr-TR')} ₺</p>
+              <h3 className="font-medium text-base truncate">{item.name}</h3>
+              <p className="text-base text-gray-500">{item.price.toLocaleString('tr-TR')} ₺</p>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-8 w-8"
                   onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
                 >
-                  <Minus className="h-3 w-3" />
+                  <Minus className="h-4 w-4" />
                 </Button>
-                <span className="w-8 text-center text-sm">{item.quantity}</span>
+                <span className="w-10 text-center text-base">{item.quantity}</span>
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-8 w-8"
                   onClick={() => updateQuantity(item.id, item.quantity + 1)}
                 >
-                  <Plus className="h-3 w-3" />
+                  <Plus className="h-4 w-4" />
                 </Button>
               </div>
               <Button
                 variant="destructive"
                 size="icon"
-                className="h-7 w-7"
+                className="h-8 w-8"
                 onClick={() => removeFromCart(item.id)}
               >
-                <X className="h-3 w-3" />
+                <X className="h-4 w-4" />
               </Button>
             </div>
           </div>
         ))}
       </CardContent>
-      <CardFooter className="flex flex-col gap-4 border-t pt-4 mt-auto">
+      <CardFooter className="flex flex-col gap-4 border-t pt-6 mt-auto">
         <div className="w-full">
-          <p className="text-lg font-semibold">Toplam: {total.toLocaleString('tr-TR')} ₺</p>
+          <p className="text-xl font-semibold">Toplam: {total.toLocaleString('tr-TR')} ₺</p>
         </div>
-        <div className="flex gap-2 w-full">
+        <div className="flex gap-3 w-full">
           <Button variant="outline" onClick={clearCart} className="flex-1">
             Sepeti Temizle
           </Button>
@@ -82,6 +82,6 @@ export const Cart = () => {
           </Button>
         </div>
       </CardFooter>
-    </Card>
+    </div>
   );
 };

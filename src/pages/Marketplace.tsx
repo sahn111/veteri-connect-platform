@@ -6,7 +6,7 @@ import { Cart } from "@/components/cart/Cart";
 import { useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 const MOCK_MEDICINES = [
   {
@@ -58,12 +58,11 @@ const MOCK_MEDICINES = [
 
 const Marketplace = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isDesktopCartVisible, setIsDesktopCartVisible] = useState(false);
 
   return (
     <CartProvider>
       <DashboardLayout>
-        <div className="container mx-auto px-4">
+        <div className="space-y-8">
           <div className="mb-8 space-y-2">
             <h1 className="text-2xl lg:text-3xl font-bold text-primary">Veteriner İlaç Pazarı</h1>
             <p className="text-muted-foreground text-sm lg:text-base">
@@ -71,50 +70,33 @@ const Marketplace = () => {
             </p>
           </div>
           
-          <div className="lg:grid lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-3 space-y-6">
-              <div className="bg-white rounded-lg shadow-sm p-4">
-                <SearchBar />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {MOCK_MEDICINES.map((medicine) => (
-                  <MedicineCard key={medicine.id} medicine={medicine} />
-                ))}
-              </div>
+          <div className="space-y-6">
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <SearchBar />
             </div>
-
-            {/* Desktop Cart */}
-            <div className={`hidden lg:block lg:col-span-1 transition-all duration-300 ${
-              isDesktopCartVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
-            }`}>
-              <div className="sticky top-16">
-                <Cart />
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {MOCK_MEDICINES.map((medicine) => (
+                <MedicineCard key={medicine.id} medicine={medicine} />
+              ))}
             </div>
-
-            {/* Universal Cart Button (Mobile & Desktop) */}
-            <Button
-              className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg z-50"
-              size="icon"
-              onClick={() => {
-                if (window.innerWidth >= 1024) {
-                  setIsDesktopCartVisible(!isDesktopCartVisible);
-                } else {
-                  setIsCartOpen(true);
-                }
-              }}
-            >
-              <ShoppingCart className="h-6 w-6" />
-            </Button>
-
-            {/* Mobile Cart Sheet */}
-            <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-              <SheetContent side="right" className="w-full sm:w-[400px] p-0">
-                <Cart />
-              </SheetContent>
-            </Sheet>
           </div>
         </div>
+
+        {/* Cart Button */}
+        <Button
+          className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg z-50"
+          size="icon"
+          onClick={() => setIsCartOpen(true)}
+        >
+          <ShoppingCart className="h-6 w-6" />
+        </Button>
+
+        {/* Cart Sheet */}
+        <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
+          <SheetContent side="right" className="w-full sm:max-w-[500px] p-0">
+            <Cart />
+          </SheetContent>
+        </Sheet>
       </DashboardLayout>
     </CartProvider>
   );
