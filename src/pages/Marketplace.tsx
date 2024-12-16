@@ -62,10 +62,10 @@ const Marketplace = () => {
   return (
     <CartProvider>
       <DashboardLayout>
-        <div className="space-y-8">
-          <div className="mb-8 space-y-2">
+        <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <div className="mb-8">
             <h1 className="text-2xl lg:text-3xl font-bold text-primary">Veteriner İlaç Pazarı</h1>
-            <p className="text-muted-foreground text-sm lg:text-base">
+            <p className="text-muted-foreground text-sm lg:text-base mt-2">
               Veteriner hekimlerin paylaştığı ilaçları keşfedin
             </p>
           </div>
@@ -74,7 +74,8 @@ const Marketplace = () => {
             <div className="bg-white rounded-lg shadow-sm p-4">
               <SearchBar />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
               {MOCK_MEDICINES.map((medicine) => (
                 <MedicineCard key={medicine.id} medicine={medicine} />
               ))}
@@ -84,7 +85,7 @@ const Marketplace = () => {
 
         {/* Cart Button */}
         <Button
-          className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg z-50"
+          className="fixed bottom-8 right-8 h-14 w-14 rounded-full shadow-lg z-50 bg-primary hover:bg-primary-dark"
           size="icon"
           onClick={() => setIsCartOpen(true)}
         >
@@ -93,7 +94,7 @@ const Marketplace = () => {
 
         {/* Cart Sheet */}
         <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-          <SheetContent side="right" className="w-full sm:max-w-[500px] p-0">
+          <SheetContent side="right" className="w-full sm:max-w-[600px] p-0">
             <Cart />
           </SheetContent>
         </Sheet>

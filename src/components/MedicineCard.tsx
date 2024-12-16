@@ -40,37 +40,42 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
   };
 
   return (
-    <Card className="bg-white hover:shadow-lg transition-all duration-200 animate-fade-up">
-      <CardHeader className="space-y-2">
-        <CardTitle className="text-xl font-semibold text-primary">{medicine.name}</CardTitle>
-        <p className="text-sm text-muted-foreground">{medicine.description}</p>
+    <Card className="flex flex-col h-full bg-white hover:shadow-lg transition-all duration-200 animate-fade-up">
+      <CardHeader className="flex-none space-y-2">
+        <CardTitle className="text-xl font-semibold text-primary line-clamp-2">{medicine.name}</CardTitle>
+        <p className="text-sm text-muted-foreground line-clamp-2">{medicine.description}</p>
       </CardHeader>
-      <CardContent>
+      
+      <CardContent className="flex-grow">
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
+          <div className="grid grid-cols-1 gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
-              <Package className="h-4 w-4 text-primary" />
-              <span>{medicine.quantity} {medicine.unit} mevcut</span>
+              <Package className="h-4 w-4 text-primary flex-shrink-0" />
+              <span className="truncate">{medicine.quantity} {medicine.unit} mevcut</span>
             </div>
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-primary" />
-              <span>Son Kullanma: {new Date(medicine.expiryDate).toLocaleDateString()}</span>
+              <Calendar className="h-4 w-4 text-primary flex-shrink-0" />
+              <span className="truncate">Son Kullanma: {new Date(medicine.expiryDate).toLocaleDateString()}</span>
             </div>
           </div>
+          
           <div className="space-y-2 border-t pt-4 mt-4">
             <div className="flex items-center gap-2">
-              <User className="h-4 w-4 text-primary" />
-              <span className="text-sm">{medicine.seller.name}</span>
+              <User className="h-4 w-4 text-primary flex-shrink-0" />
+              <span className="text-sm truncate">{medicine.seller.name}</span>
             </div>
             <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-primary" />
-              <span className="text-sm">{medicine.seller.location}</span>
+              <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
+              <span className="text-sm truncate">{medicine.seller.location}</span>
             </div>
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex flex-col sm:flex-row gap-4 items-center justify-between border-t pt-4">
-        <span className="text-xl font-bold text-primary">{medicine.price.toLocaleString('tr-TR')} ₺</span>
+      
+      <CardFooter className="flex-none flex flex-col sm:flex-row gap-4 items-center justify-between border-t pt-4">
+        <span className="text-xl font-bold text-primary whitespace-nowrap">
+          {medicine.price.toLocaleString('tr-TR')} ₺
+        </span>
         <div className="flex flex-wrap gap-2 items-center justify-end">
           <div className="flex items-center border rounded-md bg-muted">
             <Button
@@ -91,11 +96,11 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
               <Plus className="h-4 w-4" />
             </Button>
           </div>
-          <Button onClick={handleAddToCart} className="bg-primary hover:bg-primary-dark">
+          <Button onClick={handleAddToCart} className="bg-primary hover:bg-primary-dark whitespace-nowrap">
             Sepete Ekle
           </Button>
           <Link to={`/dashboard/marketplace/${medicine.id}`}>
-            <Button variant="outline">Detayları Gör</Button>
+            <Button variant="outline" className="whitespace-nowrap">Detayları Gör</Button>
           </Link>
         </div>
       </CardFooter>
