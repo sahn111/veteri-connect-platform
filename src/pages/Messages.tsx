@@ -2,6 +2,7 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageSquare, User } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "sonner";
 
 const Messages = () => {
   const messages = [
@@ -35,6 +36,12 @@ const Messages = () => {
     },
   ];
 
+  const handleMessageClick = (message: typeof messages[0]) => {
+    toast.info("Mesaj detayları yakında eklenecek!", {
+      description: `${message.sender} ile olan mesajlaşmanız burada görüntülenecek.`,
+    });
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -58,6 +65,7 @@ const Messages = () => {
                     className={`cursor-pointer transition-colors hover:bg-muted/50 ${
                       !message.isRead ? "border-primary" : ""
                     }`}
+                    onClick={() => handleMessageClick(message)}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start gap-4">
