@@ -2,10 +2,35 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { BackButton } from "@/components/BackButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, Package, DollarSign, User, MessageSquare } from "lucide-react";
+import { Calendar, Package, DollarSign, User, MessageSquare, CreditCard } from "lucide-react";
 import { useParams, Link } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 const Purchase = () => {
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
+  const { toast } = useToast();
+  
+  const handlePayment = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Ödeme işlemi simülasyonu
+    toast({
+      title: "Ödeme Başarılı",
+      description: "Siparişiniz başarıyla tamamlandı.",
+    });
+    setIsPaymentOpen(false);
+  };
+
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto">
@@ -43,6 +68,65 @@ const Purchase = () => {
                     </div>
                   </div>
                 </div>
+
+                <Dialog open={isPaymentOpen} onOpenChange={setIsPaymentOpen}>
+                  <DialogTrigger asChild>
+                    <Button className="w-full mt-6">
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      Ödeme Yap
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Ödeme Bilgileri</DialogTitle>
+                      <DialogDescription>
+                        Lütfen kart bilgilerinizi güvenli bir şekilde girin.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handlePayment} className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="cardNumber">Kart Numarası</Label>
+                        <Input
+                          id="cardNumber"
+                          placeholder="1234 5678 9012 3456"
+                          maxLength={19}
+                          required
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="expiryDate">Son Kullanma Tarihi</Label>
+                          <Input
+                            id="expiryDate"
+                            placeholder="MM/YY"
+                            maxLength={5}
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="cvv">CVV</Label>
+                          <Input
+                            id="cvv"
+                            placeholder="123"
+                            maxLength={3}
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="cardHolder">Kart Sahibinin Adı</Label>
+                        <Input
+                          id="cardHolder"
+                          placeholder="Ad Soyad"
+                          required
+                        />
+                      </div>
+                      <Button type="submit" className="w-full">
+                        Ödemeyi Tamamla
+                      </Button>
+                    </form>
+                  </DialogContent>
+                </Dialog>
               </CardContent>
             </Card>
           </div>
