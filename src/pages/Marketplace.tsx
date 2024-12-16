@@ -3,6 +3,10 @@ import { SearchBar } from "@/components/SearchBar";
 import { MedicineCard } from "@/components/MedicineCard";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { Cart } from "@/components/cart/Cart";
+import { useState } from "react";
+import { ShoppingCart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const MOCK_MEDICINES = [
   {
@@ -53,18 +57,20 @@ const MOCK_MEDICINES = [
 ];
 
 const Marketplace = () => {
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
   return (
     <CartProvider>
       <DashboardLayout>
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4">
           <div className="mb-8 space-y-2">
-            <h1 className="text-3xl font-bold text-primary">Veteriner İlaç Pazarı</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-2xl lg:text-3xl font-bold text-primary">Veteriner İlaç Pazarı</h1>
+            <p className="text-muted-foreground text-sm lg:text-base">
               Veteriner hekimlerin paylaştığı ilaçları keşfedin
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="lg:grid lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-6">
               <div className="bg-white rounded-lg shadow-sm p-4">
                 <SearchBar />
@@ -75,11 +81,28 @@ const Marketplace = () => {
                 ))}
               </div>
             </div>
-            <div className="lg:col-span-1">
+
+            {/* Desktop Cart */}
+            <div className="hidden lg:block lg:col-span-1">
               <div className="sticky top-6">
                 <Cart />
               </div>
             </div>
+
+            {/* Mobile Cart Sheet */}
+            <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg lg:hidden"
+                  size="icon"
+                >
+                  <ShoppingCart className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-full sm:w-[400px] p-0">
+                <Cart />
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </DashboardLayout>
