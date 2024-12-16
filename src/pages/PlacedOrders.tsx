@@ -94,10 +94,10 @@ const PlacedOrders = () => {
                     <Badge
                       variant={
                         order.status === "delivered"
-                          ? "success"
+                          ? "secondary"
                           : order.status === "processing"
                           ? "default"
-                          : "secondary"
+                          : "outline"
                       }
                     >
                       {order.status === "delivered"

@@ -11,7 +11,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Package, CheckCircle2, XCircle } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 // Mock data - gerçek uygulamada API'den gelecek
 const MOCK_RECEIVED_ORDERS = [
@@ -83,7 +83,7 @@ const ReceivedOrders = () => {
                   <TableCell>{order.date}</TableCell>
                   <TableCell>
                     <Badge
-                      variant={order.status === "shipped" ? "success" : "default"}
+                      variant={order.status === "shipped" ? "secondary" : "default"}
                     >
                       {order.status === "shipped" ? "Gönderildi" : "Beklemede"}
                     </Badge>
