@@ -1,22 +1,8 @@
 import { useState } from "react";
-import { MedicineCard } from "./MedicineCard";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Switch } from "./ui/switch";
-import { Label } from "./ui/label";
 import { useToast } from "./ui/use-toast";
-import { Edit, Save, X } from "lucide-react";
-
-interface Medicine {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  quantity: number;
-  unit: string;
-  expiryDate: string;
-  isActive: boolean;
-}
+import { Medicine } from "./medicine/types";
+import { MedicineListItem } from "./medicine/MedicineListItem";
+import { AddMedicineForm } from "./medicine/AddMedicineForm";
 
 const MOCK_MEDICINES: Medicine[] = [
   {
@@ -65,7 +51,7 @@ export const MedicineList = () => {
   const handleSave = () => {
     if (!editedMedicine) return;
 
-    setMedicines(medicines.map(m => 
+    setMedicines(medicines.map((m) => 
       m.id === editedMedicine.id ? editedMedicine : m
     ));
     
@@ -84,7 +70,7 @@ export const MedicineList = () => {
   };
 
   const handleStatusChange = (id: number, isActive: boolean) => {
-    setMedicines(medicines.map(m => 
+    setMedicines(medicines.map((m) => 
       m.id === id ? { ...m, isActive } : m
     ));
 
@@ -94,137 +80,40 @@ export const MedicineList = () => {
     });
   };
 
+  const handleDelete = (id: number) => {
+    setMedicines(medicines.filter((m) => m.id !== id));
+    toast({
+      title: "Başarılı",
+      description: "İlaç başarıyla silindi.",
+    });
+  };
+
+  const handleAdd = (newMedicine: Omit<Medicine, "id">) => {
+    const id = Math.max(...medicines.map((m) => m.id)) + 1;
+    setMedicines([...medicines, { ...newMedicine, id }]);
+  };
+
   return (
     <div className="space-y-6">
+      <AddMedicineForm onAdd={handleAdd} />
+      
       <div className="grid grid-cols-1 gap-6">
         {medicines.map((medicine) => (
-          <div key={medicine.id} className="bg-white p-6 rounded-lg shadow-sm border">
-            {editingId === medicine.id && editedMedicine ? (
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="name">İlaç Adı</Label>
-                    <Input
-                      id="name"
-                      value={editedMedicine.name}
-                      onChange={(e) => setEditedMedicine({
-                        ...editedMedicine,
-                        name: e.target.value
-                      })}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="price">Fiyat (₺)</Label>
-                    <Input
-                      id="price"
-                      type="number"
-                      value={editedMedicine.price}
-                      onChange={(e) => setEditedMedicine({
-                        ...editedMedicine,
-                        price: parseFloat(e.target.value)
-                      })}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="quantity">Miktar</Label>
-                    <Input
-                      id="quantity"
-                      type="number"
-                      value={editedMedicine.quantity}
-                      onChange={(e) => setEditedMedicine({
-                        ...editedMedicine,
-                        quantity: parseInt(e.target.value)
-                      })}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="unit">Birim</Label>
-                    <Input
-                      id="unit"
-                      value={editedMedicine.unit}
-                      onChange={(e) => setEditedMedicine({
-                        ...editedMedicine,
-                        unit: e.target.value
-                      })}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <Label htmlFor="description">Açıklama</Label>
-                  <Input
-                    id="description"
-                    value={editedMedicine.description}
-                    onChange={(e) => setEditedMedicine({
-                      ...editedMedicine,
-                      description: e.target.value
-                    })}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="expiryDate">Son Kullanma Tarihi</Label>
-                  <Input
-                    id="expiryDate"
-                    type="date"
-                    value={editedMedicine.expiryDate}
-                    onChange={(e) => setEditedMedicine({
-                      ...editedMedicine,
-                      expiryDate: e.target.value
-                    })}
-                  />
-                </div>
-                <div className="flex justify-end space-x-2">
-                  <Button variant="outline" onClick={handleCancel}>
-                    <X className="mr-2 h-4 w-4" />
-                    İptal
-                  </Button>
-                  <Button onClick={handleSave}>
-                    <Save className="mr-2 h-4 w-4" />
-                    Kaydet
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-semibold">{medicine.name}</h3>
-                    <p className="text-sm text-gray-600">{medicine.description}</p>
-                  </div>
-                  <Button variant="outline" onClick={() => handleEdit(medicine)}>
-                    <Edit className="mr-2 h-4 w-4" />
-                    Düzenle
-                  </Button>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div>
-                    <Label>Fiyat</Label>
-                    <p className="text-sm font-medium">{medicine.price} ₺</p>
-                  </div>
-                  <div>
-                    <Label>Miktar</Label>
-                    <p className="text-sm font-medium">{medicine.quantity} {medicine.unit}</p>
-                  </div>
-                  <div>
-                    <Label>Son Kullanma Tarihi</Label>
-                    <p className="text-sm font-medium">
-                      {new Date(medicine.expiryDate).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div>
-                    <Label>Durum</Label>
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        checked={medicine.isActive}
-                        onCheckedChange={(checked) => handleStatusChange(medicine.id, checked)}
-                      />
-                      <span className="text-sm font-medium">
-                        {medicine.isActive ? 'Aktif' : 'Pasif'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+          <div
+            key={medicine.id}
+            className="bg-white p-6 rounded-lg shadow-sm border"
+          >
+            <MedicineListItem
+              medicine={medicine}
+              isEditing={editingId === medicine.id}
+              editedMedicine={editedMedicine}
+              onEdit={handleEdit}
+              onSave={handleSave}
+              onCancel={handleCancel}
+              onDelete={handleDelete}
+              onStatusChange={handleStatusChange}
+              setEditedMedicine={setEditedMedicine}
+            />
           </div>
         ))}
       </div>
