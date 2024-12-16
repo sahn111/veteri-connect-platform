@@ -58,7 +58,7 @@ const MOCK_MEDICINES = [
 
 const Marketplace = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isDesktopCartVisible, setIsDesktopCartVisible] = useState(true);
+  const [isDesktopCartVisible, setIsDesktopCartVisible] = useState(false);
 
   return (
     <CartProvider>
@@ -83,17 +83,6 @@ const Marketplace = () => {
               </div>
             </div>
 
-            {/* Desktop Cart Toggle Button */}
-            <Button
-              variant="outline"
-              size="sm"
-              className="hidden lg:flex fixed top-4 right-4 z-30 items-center gap-2"
-              onClick={() => setIsDesktopCartVisible(!isDesktopCartVisible)}
-            >
-              <ShoppingCart className="h-4 w-4" />
-              {isDesktopCartVisible ? "Sepeti Gizle" : "Sepeti Göster"}
-            </Button>
-
             {/* Desktop Cart */}
             <div className={`hidden lg:block lg:col-span-1 transition-all duration-300 ${
               isDesktopCartVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
@@ -103,16 +92,23 @@ const Marketplace = () => {
               </div>
             </div>
 
+            {/* Universal Cart Button (Mobile & Desktop) */}
+            <Button
+              className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg z-50"
+              size="icon"
+              onClick={() => {
+                if (window.innerWidth >= 1024) {
+                  setIsDesktopCartVisible(!isDesktopCartVisible);
+                } else {
+                  setIsCartOpen(true);
+                }
+              }}
+            >
+              <ShoppingCart className="h-6 w-6" />
+            </Button>
+
             {/* Mobile Cart Sheet */}
             <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-              <SheetTrigger asChild>
-                <Button
-                  className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg lg:hidden"
-                  size="icon"
-                >
-                  <ShoppingCart className="h-6 w-6" />
-                </Button>
-              </SheetTrigger>
               <SheetContent side="right" className="w-full sm:w-[400px] p-0">
                 <Cart />
               </SheetContent>
