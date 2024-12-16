@@ -29,7 +29,7 @@ const Walkthrough = () => {
           <Section
             title="2. İlaç Takası ve Alışveriş"
             description="Elinizde bulunan ilaçları listeleyin veya ihtiyacınız olan ilaçları güvenle satın alın."
-            image="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+            image="https://images.unsplash.com/photo-1587854692152-cbe660dbde88"
             icon={<ShoppingCart className="h-8 w-8" />}
             reverse
           />
@@ -37,14 +37,14 @@ const Walkthrough = () => {
           <Section
             title="3. Profesyonel İletişim"
             description="Diğer veteriner hekimlerle mesajlaşın, deneyimlerinizi paylaşın."
-            image="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+            image="https://images.unsplash.com/photo-1576091160550-2173dba999ef"
             icon={<MessageSquare className="h-8 w-8" />}
           />
 
           <Section
             title="4. Stok Yönetimi"
             description="İlaç envanterinizi kolayca takip edin ve yönetin."
-            image="https://images.unsplash.com/photo-1605810230434-7631ac76ec81"
+            image="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d"
             icon={<Package className="h-8 w-8" />}
             reverse
           />
