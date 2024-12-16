@@ -2,7 +2,7 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Package, DollarSign, User, MessageSquare } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 // Mock data - gerçek uygulamada bu veriler API'den gelecek
 const MOCK_MEDICINE = {
@@ -14,6 +14,7 @@ const MOCK_MEDICINE = {
   unit: "tablet",
   expiryDate: "2024-12-31",
   seller: {
+    id: 1,
     name: "Dr. Ayşe Yılmaz",
     clinic: "Merkez Veteriner Kliniği",
     location: "İstanbul"
@@ -22,8 +23,6 @@ const MOCK_MEDICINE = {
 
 const MedicineDetails = () => {
   const { id } = useParams();
-
-  // Gerçek uygulamada ID'ye göre ilaç detayları çekilecek
   const medicine = MOCK_MEDICINE;
 
   return (
@@ -84,9 +83,11 @@ const MedicineDetails = () => {
                       <MessageSquare className="mr-2 h-4 w-4" />
                       Satıcıyla İletişime Geç
                     </Button>
-                    <Button variant="outline" className="w-full">
-                      Satıcı Profilini Gör
-                    </Button>
+                    <Link to={`/dashboard/marketplace/seller/${medicine.seller.id}`}>
+                      <Button variant="outline" className="w-full">
+                        Satıcı Profilini Gör
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </CardContent>

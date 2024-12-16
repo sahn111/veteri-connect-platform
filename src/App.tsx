@@ -15,6 +15,7 @@ import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Inventory from "./pages/Inventory";
+import SellerProfile from "./pages/SellerProfile";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/dashboard/marketplace" element={<Marketplace />} />
             <Route path="/dashboard/marketplace/add" element={<AddMedicine />} />
             <Route path="/dashboard/marketplace/:id" element={<MedicineDetails />} />
+            <Route path="/dashboard/marketplace/seller/:id" element={<SellerProfile />} />
             <Route path="/dashboard/messages" element={<Messages />} />
             <Route path="/dashboard/profile" element={<Profile />} />
             <Route path="/dashboard/settings" element={<Settings />} />
