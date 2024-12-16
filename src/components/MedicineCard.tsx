@@ -75,7 +75,7 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
       </CardContent>
       
       <CardFooter className="flex flex-col space-y-4 border-t p-6">
-        <div className="flex items-center justify-between w-full">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4">
           <span className="text-2xl font-bold text-primary">
             {medicine.price.toLocaleString('tr-TR')} ₺
           </span>
@@ -84,16 +84,16 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
               variant="ghost"
               size="icon"
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="h-12 w-12"
+              className="h-10 w-10"
             >
               <Minus className="h-4 w-4" />
             </Button>
-            <span className="w-16 text-center text-lg font-medium">{quantity}</span>
+            <span className="w-12 text-center text-lg font-medium">{quantity}</span>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setQuantity(quantity + 1)}
-              className="h-12 w-12"
+              className="h-10 w-10"
             >
               <Plus className="h-4 w-4" />
             </Button>
@@ -103,14 +103,14 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
         <div className="flex flex-col gap-3 w-full">
           <Button 
             onClick={handleAddToCart} 
-            className="w-full bg-primary hover:bg-primary-dark text-white h-12 text-lg font-medium"
+            className="w-full bg-primary hover:bg-primary/90 text-white h-11 text-lg font-medium"
           >
             Sepete Ekle
           </Button>
           <Link to={`/dashboard/marketplace/${medicine.id}`} className="w-full">
             <Button 
               variant="outline" 
-              className="w-full border-primary text-primary hover:bg-primary/10 h-12 text-lg font-medium"
+              className="w-full border-primary text-primary hover:bg-primary/10 h-11 text-lg font-medium"
             >
               Detayları Gör
             </Button>
