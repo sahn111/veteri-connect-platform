@@ -12,6 +12,18 @@ const Purchase = () => {
   const { items, total, clearCart } = useCart();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    phone: "",
+    email: "",
+    address: "",
+    city: "",
+    district: "",
+    cardName: "",
+    cardNumber: "",
+    expiry: "",
+    cvv: "",
+  });
 
   useEffect(() => {
     if (items.length === 0) {
@@ -19,7 +31,24 @@ const Purchase = () => {
     }
   }, [items.length, navigate]);
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handlePurchase = () => {
+    // Form validation
+    const requiredFields = Object.entries(formData);
+    const emptyFields = requiredFields.filter(([_, value]) => !value.trim());
+
+    if (emptyFields.length > 0) {
+      toast.error("Lütfen tüm alanları doldurun!");
+      return;
+    }
+
     setLoading(true);
     // Simulate purchase process
     setTimeout(() => {
@@ -75,12 +104,44 @@ const Purchase = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input placeholder="Ad Soyad" />
-                    <Input placeholder="Telefon" />
-                    <Input placeholder="E-posta" className="md:col-span-2" />
-                    <Input placeholder="Adres" className="md:col-span-2" />
-                    <Input placeholder="İl" />
-                    <Input placeholder="İlçe" />
+                    <Input 
+                      placeholder="Ad Soyad" 
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleInputChange}
+                    />
+                    <Input 
+                      placeholder="Telefon" 
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                    />
+                    <Input 
+                      placeholder="E-posta" 
+                      className="md:col-span-2"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                    />
+                    <Input 
+                      placeholder="Adres" 
+                      className="md:col-span-2"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                    />
+                    <Input 
+                      placeholder="İl" 
+                      name="city"
+                      value={formData.city}
+                      onChange={handleInputChange}
+                    />
+                    <Input 
+                      placeholder="İlçe"
+                      name="district"
+                      value={formData.district}
+                      onChange={handleInputChange}
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -95,10 +156,32 @@ const Purchase = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input placeholder="Kart Üzerindeki İsim" className="md:col-span-2" />
-                    <Input placeholder="Kart Numarası" className="md:col-span-2" />
-                    <Input placeholder="Son Kullanma Tarihi (AA/YY)" />
-                    <Input placeholder="CVV" />
+                    <Input 
+                      placeholder="Kart Üzerindeki İsim" 
+                      className="md:col-span-2"
+                      name="cardName"
+                      value={formData.cardName}
+                      onChange={handleInputChange}
+                    />
+                    <Input 
+                      placeholder="Kart Numarası" 
+                      className="md:col-span-2"
+                      name="cardNumber"
+                      value={formData.cardNumber}
+                      onChange={handleInputChange}
+                    />
+                    <Input 
+                      placeholder="Son Kullanma Tarihi (AA/YY)"
+                      name="expiry"
+                      value={formData.expiry}
+                      onChange={handleInputChange}
+                    />
+                    <Input 
+                      placeholder="CVV"
+                      name="cvv"
+                      value={formData.cvv}
+                      onChange={handleInputChange}
+                    />
                   </div>
                 </CardContent>
               </Card>
