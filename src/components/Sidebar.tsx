@@ -25,7 +25,7 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
       <div className="p-4 flex flex-col h-full">
         <div className="mb-6 flex items-center justify-between">
           <Link to="/dashboard" className="text-primary font-bold text-xl" onClick={handleLinkClick}>
-            VetTakas
+            VetMedEx
           </Link>
         </div>
         

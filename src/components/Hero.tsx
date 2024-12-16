@@ -37,14 +37,14 @@ export const Hero = () => {
               </DialogTrigger>
               <DialogContent className="sm:max-w-[625px]">
                 <DialogHeader>
-                  <DialogTitle>VetTakas Hakkında</DialogTitle>
+                  <DialogTitle>VetMedEx Hakkında</DialogTitle>
                   <DialogDescription>
-                    VetTakas, veteriner hekimler arasında güvenli ve etkin ilaç takasını sağlayan profesyonel bir platformdur.
+                    VetMedEx, veteriner hekimler arasında güvenli ve etkin ilaç takasını sağlayan profesyonel bir platformdur.
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-medium mb-2">Neden VetTakas?</h4>
+                    <h4 className="font-medium mb-2">Neden VetMedEx?</h4>
                     <ul className="list-disc pl-5 space-y-2">
                       <li>Güvenli ve kontrollü ilaç takası</li>
                       <li>Profesyonel veteriner hekim ağı</li>
