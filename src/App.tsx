@@ -16,6 +16,7 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Inventory from "./pages/Inventory";
 import SellerProfile from "./pages/SellerProfile";
+import Purchase from "./pages/Purchase";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/dashboard/profile" element={<Profile />} />
             <Route path="/dashboard/settings" element={<Settings />} />
             <Route path="/dashboard/inventory" element={<Inventory />} />
+            <Route path="/dashboard/purchase" element={<Purchase />} />
           </Routes>
         </BrowserRouter>
       </CartProvider>

@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "./CartProvider";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Minus, Plus, ShoppingCart, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const Cart = () => {
   const { items, removeFromCart, updateQuantity, total, clearCart } = useCart();
+  const navigate = useNavigate();
 
   if (items.length === 0) {
     return (
@@ -69,7 +71,7 @@ export const Cart = () => {
           </div>
         ))}
       </CardContent>
-      <CardFooter className="flex flex-col gap-4 border-t pt-6 mt-auto">
+      <CardFooter className="flex flex-col space-y-4 border-t pt-6 mt-auto">
         <div className="w-full">
           <p className="text-xl font-semibold">Toplam: {total.toLocaleString('tr-TR')} ₺</p>
         </div>
@@ -77,7 +79,7 @@ export const Cart = () => {
           <Button variant="outline" onClick={clearCart} className="flex-1">
             Sepeti Temizle
           </Button>
-          <Button className="flex-1">
+          <Button className="flex-1" onClick={() => navigate("/dashboard/purchase")}>
             Satın Al
           </Button>
         </div>
