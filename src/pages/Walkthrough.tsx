@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/BackButton";
+import { Link } from "react-router-dom";
 import {
   ArrowRight,
   ShoppingCart,
