@@ -9,6 +9,9 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Marketplace from "./pages/Marketplace";
 import MedicineDetails from "./pages/MedicineDetails";
+import Messages from "./pages/Messages";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +28,9 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/marketplace" element={<Marketplace />} />
           <Route path="/dashboard/marketplace/:id" element={<MedicineDetails />} />
+          <Route path="/dashboard/messages" element={<Messages />} />
+          <Route path="/dashboard/profile" element={<Profile />} />
+          <Route path="/dashboard/settings" element={<Settings />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
