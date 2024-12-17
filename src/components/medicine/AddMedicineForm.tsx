@@ -19,8 +19,11 @@ export const AddMedicineForm = ({ onAdd }: AddMedicineFormProps) => {
     price: 0,
     quantity: 0,
     unit: "tablet",
-    expiryDate: "",
-    isActive: true,
+    expiry_date: "",
+    is_active: true,
+    seller_id: "1", // This should be the actual user ID in production
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -33,8 +36,11 @@ export const AddMedicineForm = ({ onAdd }: AddMedicineFormProps) => {
       price: 0,
       quantity: 0,
       unit: "tablet",
-      expiryDate: "",
-      isActive: true,
+      expiry_date: "",
+      is_active: true,
+      seller_id: "1",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     });
     toast({
       title: "Başarılı",
@@ -112,21 +118,21 @@ export const AddMedicineForm = ({ onAdd }: AddMedicineFormProps) => {
         <Input
           id="new-description"
           required
-          value={newMedicine.description}
+          value={newMedicine.description || ""}
           onChange={(e) =>
             setNewMedicine({ ...newMedicine, description: e.target.value })
           }
         />
       </div>
       <div>
-        <Label htmlFor="new-expiryDate">Son Kullanma Tarihi</Label>
+        <Label htmlFor="new-expiry_date">Son Kullanma Tarihi</Label>
         <Input
-          id="new-expiryDate"
+          id="new-expiry_date"
           type="date"
           required
-          value={newMedicine.expiryDate}
+          value={newMedicine.expiry_date}
           onChange={(e) =>
-            setNewMedicine({ ...newMedicine, expiryDate: e.target.value })
+            setNewMedicine({ ...newMedicine, expiry_date: e.target.value })
           }
         />
       </div>

@@ -12,8 +12,8 @@ interface MedicineListItemProps {
   onEdit: (medicine: Medicine) => void;
   onSave: () => void;
   onCancel: () => void;
-  onDelete: (id: number) => void;
-  onStatusChange: (id: number, isActive: boolean) => void;
+  onDelete: (id: string) => void;
+  onStatusChange: (id: string, is_active: boolean) => void;
   setEditedMedicine: (medicine: Medicine) => void;
 }
 
@@ -91,7 +91,7 @@ export const MedicineListItem = ({
           <Label htmlFor="description">Açıklama</Label>
           <Input
             id="description"
-            value={editedMedicine.description}
+            value={editedMedicine.description || ""}
             onChange={(e) =>
               setEditedMedicine({
                 ...editedMedicine,
@@ -101,15 +101,15 @@ export const MedicineListItem = ({
           />
         </div>
         <div>
-          <Label htmlFor="expiryDate">Son Kullanma Tarihi</Label>
+          <Label htmlFor="expiry_date">Son Kullanma Tarihi</Label>
           <Input
-            id="expiryDate"
+            id="expiry_date"
             type="date"
-            value={editedMedicine.expiryDate}
+            value={editedMedicine.expiry_date}
             onChange={(e) =>
               setEditedMedicine({
                 ...editedMedicine,
-                expiryDate: e.target.value,
+                expiry_date: e.target.value,
               })
             }
           />
@@ -163,18 +163,18 @@ export const MedicineListItem = ({
         <div>
           <Label>Son Kullanma Tarihi</Label>
           <p className="text-sm font-medium">
-            {new Date(medicine.expiryDate).toLocaleDateString()}
+            {new Date(medicine.expiry_date).toLocaleDateString()}
           </p>
         </div>
         <div>
           <Label>Durum</Label>
           <div className="flex items-center space-x-2">
             <Switch
-              checked={medicine.isActive}
+              checked={medicine.is_active || false}
               onCheckedChange={(checked) => onStatusChange(medicine.id, checked)}
             />
             <span className="text-sm font-medium">
-              {medicine.isActive ? "Aktif" : "Pasif"}
+              {medicine.is_active ? "Aktif" : "Pasif"}
             </span>
           </div>
         </div>
