@@ -19,31 +19,14 @@ const Marketplace = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('medicines')
-        .select(`
-          *,
-          seller:profiles(
-            full_name,
-            email,
-            name:full_name,
-            clinic:full_name,
-            location:full_name
-          )
-        `);
+        .select('id, name, price, quantity, unit');
 
       if (error) {
         console.error('Error fetching medicines:', error);
         throw error;
       }
 
-      return data as (Medicine & { 
-        seller: { 
-          name: string | null;
-          clinic: string | null;
-          location: string | null;
-          full_name: string | null;
-          email: string | null;
-        } 
-      })[];
+      return data as Medicine[];
     },
   });
 
@@ -87,20 +70,6 @@ const Marketplace = () => {
             </div>
           </div>
         </div>
-
-        <Button
-          className="fixed bottom-8 right-8 h-16 w-16 rounded-full shadow-lg z-50 bg-primary hover:bg-primary-dark"
-          size="icon"
-          onClick={() => setIsCartOpen(true)}
-        >
-          <ShoppingCart className="h-8 w-8" />
-        </Button>
-
-        <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-          <SheetContent side="right" className="w-full sm:max-w-[600px] p-0">
-            <Cart />
-          </SheetContent>
-        </Sheet>
       </DashboardLayout>
     </CartProvider>
   );
