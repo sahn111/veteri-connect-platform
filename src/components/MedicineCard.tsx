@@ -24,7 +24,7 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
 
   const handleAddToCart = () => {
     addToCart({
-      id: medicine.id,
+      id: Number(medicine.id),
       name: medicine.name,
       price: Number(medicine.price),
       quantity: quantity,
