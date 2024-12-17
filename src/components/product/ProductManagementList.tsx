@@ -7,6 +7,7 @@ import { ProductDetails } from "./ProductDetails";
 import { AddProductForm } from "./AddProductForm";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { PriceChangeConfig } from "./types";
 
 type InventoryItem = Tables<"inventory">;
 
@@ -82,7 +83,7 @@ export const ProductManagementList = ({ inventory }: ProductManagementListProps)
     });
   };
 
-  const handlePriceChange = async (product: InventoryItem, increase: boolean, config: { amount: string; isPercentage: boolean }) => {
+  const handlePriceChange = async (product: InventoryItem, increase: boolean, config: PriceChangeConfig) => {
     const amount = parseFloat(config.amount);
     if (isNaN(amount) || amount <= 0) {
       toast({
@@ -93,7 +94,6 @@ export const ProductManagementList = ({ inventory }: ProductManagementListProps)
       return;
     }
 
-    // For now, we'll just update the quantity as an example
     const newQuantity = increase ? product.quantity + amount : product.quantity - amount;
 
     const { error } = await supabase

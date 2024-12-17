@@ -1,14 +1,6 @@
-export interface Product {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  quantity: number;
-  unit: string;
-  isActive: boolean;
-  marketplacePrice?: number;
-  isListedInMarketplace?: boolean;
-}
+import { Tables } from "@/integrations/supabase/types";
+
+export type InventoryItem = Tables<"inventory">;
 
 export interface PriceChangeConfig {
   amount: string;
