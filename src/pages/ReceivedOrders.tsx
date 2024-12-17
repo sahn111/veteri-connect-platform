@@ -12,38 +12,98 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
-// Mock data - gerçek uygulamada API'den gelecek
-const MOCK_RECEIVED_ORDERS = [
-  {
-    id: "ORD001",
-    customerName: "Ahmet Yılmaz",
-    product: "Amoksisilin",
-    quantity: 2,
-    total: 599.98,
-    status: "pending",
-    date: "2024-03-15",
-  },
-  {
-    id: "ORD002",
-    customerName: "Mehmet Demir",
-    product: "Rimadil",
-    quantity: 1,
-    total: 459.99,
-    status: "shipped",
-    date: "2024-03-14",
-  },
-];
+interface Order {
+  id: string;
+  buyer_id: string;
+  status: string;
+  total_amount: number;
+  created_at: string;
+  buyer: {
+    full_name: string | null;
+    email: string | null;
+  };
+  order_items: {
+    quantity: number;
+    medicine: {
+      name: string;
+    };
+  }[];
+}
 
 const ReceivedOrders = () => {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const { data: orders = [], isLoading } = useQuery({
+    queryKey: ['receivedOrders'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('orders')
+        .select(`
+          *,
+          buyer:profiles(full_name, email),
+          order_items(
+            quantity,
+            medicine:medicines(name)
+          )
+        `)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Hata",
+          description: "Siparişler yüklenirken bir hata oluştu.",
+        });
+        throw error;
+      }
+
+      return data as Order[];
+    },
+  });
+
+  const updateOrderStatus = useMutation({
+    mutationFn: async ({ orderId, newStatus }: { orderId: string; newStatus: string }) => {
+      const { error } = await supabase
+        .from('orders')
+        .update({ status: newStatus })
+        .eq('id', orderId);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['receivedOrders'] });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Hata",
+        description: "Sipariş durumu güncellenirken bir hata oluştu.",
+      });
+      console.error('Status update error:', error);
+    },
+  });
 
   const handleStatusUpdate = (orderId: string, newStatus: string) => {
+    updateOrderStatus.mutate({ orderId, newStatus });
     toast({
       title: "Durum Güncellendi",
-      description: `Sipariş ${orderId} için durum güncellendi: ${newStatus}`,
+      description: `Sipariş durumu güncellendi: ${newStatus}`,
     });
   };
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-full">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -73,17 +133,25 @@ const ReceivedOrders = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {MOCK_RECEIVED_ORDERS.map((order) => (
+              {orders.map((order) => (
                 <TableRow 
                   key={order.id}
                   className={order.status === "pending" ? "animate-blink" : ""}
                 >
-                  <TableCell>{order.id}</TableCell>
-                  <TableCell>{order.customerName}</TableCell>
-                  <TableCell>{order.product}</TableCell>
-                  <TableCell>{order.quantity}</TableCell>
-                  <TableCell>₺{order.total.toFixed(2)}</TableCell>
-                  <TableCell>{order.date}</TableCell>
+                  <TableCell>{order.id.slice(0, 8)}</TableCell>
+                  <TableCell>
+                    {order.buyer?.full_name || order.buyer?.email || "İsimsiz Müşteri"}
+                  </TableCell>
+                  <TableCell>
+                    {order.order_items[0]?.medicine.name || "Bilinmeyen Ürün"}
+                  </TableCell>
+                  <TableCell>
+                    {order.order_items[0]?.quantity || 0}
+                  </TableCell>
+                  <TableCell>₺{order.total_amount.toFixed(2)}</TableCell>
+                  <TableCell>
+                    {new Date(order.created_at).toLocaleDateString()}
+                  </TableCell>
                   <TableCell>
                     <Badge
                       variant={order.status === "shipped" ? "secondary" : "default"}
