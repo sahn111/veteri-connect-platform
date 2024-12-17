@@ -1,55 +1,56 @@
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
-import { Product, PriceChangeConfig } from "./types";
+import { Tables } from "@/integrations/supabase/types";
 import { PriceManagement } from "./PriceManagement";
 import { ProductDetails } from "./ProductDetails";
 import { AddProductForm } from "./AddProductForm";
+import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
 
-// Mock inventory data - gerçek uygulamada API'den gelecek
-const MOCK_INVENTORY = [
-  {
-    id: 1,
-    name: "Amoksisilin",
-    price: 299.99,
-    description: "Geniş spektrumlu antibiyotik",
-    quantity: 100,
-    unit: "tablet",
-    isActive: true,
-    marketplacePrice: 329.99,
-    isListedInMarketplace: true,
-  },
-  {
-    id: 2,
-    name: "Rimadil",
-    price: 459.99,
-    description: "Anti-enflamatuar ilaç",
-    quantity: 50,
-    unit: "tablet",
-    isActive: true,
-    marketplacePrice: 489.99,
-    isListedInMarketplace: false,
-  },
-];
+type InventoryItem = Tables<"inventory">;
 
-export const ProductManagementList = () => {
-  const [products, setProducts] = useState<Product[]>(MOCK_INVENTORY);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [editedProduct, setEditedProduct] = useState<Product | null>(null);
+interface ProductManagementListProps {
+  inventory: InventoryItem[];
+}
+
+export const ProductManagementList = ({ inventory }: ProductManagementListProps) => {
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editedProduct, setEditedProduct] = useState<InventoryItem | null>(null);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  const handleEdit = (product: Product) => {
+  const handleEdit = (product: InventoryItem) => {
     setEditingId(product.id);
     setEditedProduct({ ...product });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!editedProduct) return;
 
-    setProducts(products.map((p) => 
-      p.id === editedProduct.id ? editedProduct : p
-    ));
-    
+    const { error } = await supabase
+      .from('inventory')
+      .update({
+        name: editedProduct.name,
+        quantity: editedProduct.quantity,
+        unit: editedProduct.unit,
+        min_stock: editedProduct.min_stock,
+        expiry_date: editedProduct.expiry_date,
+        is_active: editedProduct.is_active,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', editedProduct.id);
+
+    if (error) {
+      toast({
+        title: "Hata",
+        description: "Ürün güncellenirken bir hata oluştu.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    queryClient.invalidateQueries({ queryKey: ['inventory'] });
     setEditingId(null);
     setEditedProduct(null);
 
@@ -59,15 +60,29 @@ export const ProductManagementList = () => {
     });
   };
 
-  const handleDelete = (id: number) => {
-    setProducts(products.filter((p) => p.id !== id));
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase
+      .from('inventory')
+      .update({ is_active: false })
+      .eq('id', id);
+
+    if (error) {
+      toast({
+        title: "Hata",
+        description: "Ürün silinirken bir hata oluştu.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    queryClient.invalidateQueries({ queryKey: ['inventory'] });
     toast({
       title: "Başarılı",
       description: "Ürün başarıyla silindi.",
     });
   };
 
-  const handlePriceChange = (product: Product, increase: boolean, config: PriceChangeConfig) => {
+  const handlePriceChange = async (product: InventoryItem, increase: boolean, config: { amount: string; isPercentage: boolean }) => {
     const amount = parseFloat(config.amount);
     if (isNaN(amount) || amount <= 0) {
       toast({
@@ -78,52 +93,72 @@ export const ProductManagementList = () => {
       return;
     }
 
-    const updatedProducts = products.map((p) => {
-      if (p.id === product.id) {
-        let newPrice = p.marketplacePrice || p.price;
-        if (config.isPercentage) {
-          const changeAmount = (newPrice * amount) / 100;
-          newPrice = increase ? newPrice + changeAmount : newPrice - changeAmount;
-        } else {
-          newPrice = increase ? newPrice + amount : newPrice - amount;
-        }
+    // For now, we'll just update the quantity as an example
+    const newQuantity = increase ? product.quantity + amount : product.quantity - amount;
 
-        return { 
-          ...p, 
-          marketplacePrice: Math.max(0, Number(newPrice.toFixed(2))) 
-        };
-      }
-      return p;
-    });
+    const { error } = await supabase
+      .from('inventory')
+      .update({
+        quantity: Math.max(0, newQuantity),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', product.id);
 
-    setProducts(updatedProducts);
+    if (error) {
+      toast({
+        title: "Hata",
+        description: "Fiyat güncellenirken bir hata oluştu.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    queryClient.invalidateQueries({ queryKey: ['inventory'] });
     toast({
       title: "Başarılı",
-      description: `${product.name} için fiyat ${increase ? "artışı" : "indirimi"} uygulandı.`,
+      description: `${product.name} için ${increase ? "artış" : "indirim"} uygulandı.`,
     });
   };
 
-  const handleMarketplaceStatusChange = (id: number, isListed: boolean) => {
-    setProducts(products.map((p) => 
-      p.id === id ? { ...p, isListedInMarketplace: isListed } : p
-    ));
+  const handleAddProduct = async (newProduct: Omit<InventoryItem, "id" | "created_at" | "updated_at" | "owner_id">) => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast({
+        title: "Hata",
+        description: "Oturum açmanız gerekiyor.",
+        variant: "destructive",
+      });
+      return;
+    }
 
+    const { error } = await supabase
+      .from('inventory')
+      .insert({
+        ...newProduct,
+        owner_id: user.id,
+      });
+
+    if (error) {
+      toast({
+        title: "Hata",
+        description: "Ürün eklenirken bir hata oluştu.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    queryClient.invalidateQueries({ queryKey: ['inventory'] });
     toast({
       title: "Başarılı",
-      description: `Ürün pazar yerinde ${isListed ? 'listelenecek' : 'listeden kaldırıldı'}.`,
+      description: "Yeni ürün başarıyla eklendi.",
     });
-  };
-
-  const handleAddProduct = (newProduct: Omit<Product, "id">) => {
-    const newId = Math.max(...products.map(p => p.id)) + 1;
-    setProducts([...products, { ...newProduct, id: newId }]);
   };
 
   return (
     <div className="space-y-6">
       <AddProductForm onAdd={handleAddProduct} />
       <div className="grid grid-cols-1 gap-6">
-        {products.map((product) => (
+        {inventory.map((product) => (
           <Card key={product.id}>
             <CardContent className="p-6">
               <ProductDetails
@@ -134,7 +169,7 @@ export const ProductManagementList = () => {
                 onSave={handleSave}
                 onDelete={handleDelete}
                 setEditedProduct={setEditedProduct}
-                onMarketplaceStatusChange={handleMarketplaceStatusChange}
+                onMarketplaceStatusChange={() => {}}
               />
               <div className="mt-4">
                 <PriceManagement

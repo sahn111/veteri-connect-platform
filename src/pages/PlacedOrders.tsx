@@ -10,40 +10,42 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Package, MessageSquare } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
-
-// Mock data - gerçek uygulamada API'den gelecek
-const MOCK_PLACED_ORDERS = [
-  {
-    id: "ORD003",
-    seller: {
-      id: 1,
-      name: "Dr. Ayşe Yılmaz",
-      clinic: "Merkez Veteriner Kliniği",
-    },
-    product: "Frontline Plus",
-    quantity: 3,
-    total: 1079.97,
-    status: "processing",
-    date: "2024-03-15",
-  },
-  {
-    id: "ORD004",
-    seller: {
-      id: 2,
-      name: "Dr. Mehmet Demir",
-      clinic: "Hayat Veteriner Kliniği",
-    },
-    product: "Rimadil",
-    quantity: 1,
-    total: 459.99,
-    status: "delivered",
-    date: "2024-03-10",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const PlacedOrders = () => {
+  const { data: orders, isLoading } = useQuery({
+    queryKey: ['placed-orders'],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      const { data: ordersData, error: ordersError } = await supabase
+        .from('orders')
+        .select(`
+          *,
+          seller:profiles!orders_seller_id_fkey (
+            id,
+            full_name,
+            email
+          ),
+          order_items (
+            *,
+            medicine:medicines (
+              name
+            )
+          )
+        `)
+        .eq('buyer_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (ordersError) throw ordersError;
+      return ordersData;
+    },
+  });
+
   const helpContent = `
     Verilen Siparişler sayfasında:
     1. Tüm siparişlerinizi tarih sırasıyla görebilirsiniz
@@ -52,6 +54,14 @@ const PlacedOrders = () => {
     4. Satıcı profiline gidebilirsiniz
     5. Sipariş detaylarını görüntüleyebilirsiniz
   `;
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <div>Yükleniyor...</div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout helpContent={helpContent}>
@@ -72,8 +82,7 @@ const PlacedOrders = () => {
               <TableRow>
                 <TableHead>Sipariş No</TableHead>
                 <TableHead>Satıcı</TableHead>
-                <TableHead>Ürün</TableHead>
-                <TableHead>Miktar</TableHead>
+                <TableHead>Ürünler</TableHead>
                 <TableHead>Toplam</TableHead>
                 <TableHead>Tarih</TableHead>
                 <TableHead>Durum</TableHead>
@@ -81,24 +90,28 @@ const PlacedOrders = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {MOCK_PLACED_ORDERS.map((order) => (
+              {orders?.map((order) => (
                 <TableRow key={order.id}>
-                  <TableCell>{order.id}</TableCell>
+                  <TableCell>{order.id.slice(0, 8)}</TableCell>
                   <TableCell>
                     <Link
                       to={`/dashboard/marketplace/seller/${order.seller.id}`}
                       className="hover:underline"
                     >
-                      {order.seller.name}
+                      {order.seller.full_name || order.seller.email}
                     </Link>
-                    <div className="text-sm text-muted-foreground">
-                      {order.seller.clinic}
-                    </div>
                   </TableCell>
-                  <TableCell>{order.product}</TableCell>
-                  <TableCell>{order.quantity}</TableCell>
-                  <TableCell>₺{order.total.toFixed(2)}</TableCell>
-                  <TableCell>{order.date}</TableCell>
+                  <TableCell>
+                    {order.order_items.map((item) => (
+                      <div key={item.id}>
+                        {item.medicine.name} x {item.quantity}
+                      </div>
+                    ))}
+                  </TableCell>
+                  <TableCell>₺{order.total_amount.toFixed(2)}</TableCell>
+                  <TableCell>
+                    {new Date(order.created_at).toLocaleDateString()}
+                  </TableCell>
                   <TableCell>
                     <Badge
                       variant={
