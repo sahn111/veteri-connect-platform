@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { User, ShoppingCart, MessageSquare, Settings, LogOut, Package, ClipboardList } from "lucide-react";
+import { User, ShoppingCart, MessageSquare, Settings, LogOut, Package, ClipboardList, DollarSign } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 
@@ -52,6 +52,18 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
             >
               <Package className="mr-2 h-4 w-4" />
               Stok Takibi
+            </Button>
+          </Link>
+          <Link to="/dashboard/manage-products" onClick={handleLinkClick}>
+            <Button 
+              variant={isActive("/dashboard/manage-products") ? "secondary" : "ghost"}
+              className={cn(
+                "w-full justify-start",
+                isActive("/dashboard/manage-products") && "bg-primary/10"
+              )}
+            >
+              <DollarSign className="mr-2 h-4 w-4" />
+              Ürün Yönetimi
             </Button>
           </Link>
           <Link to="/dashboard/orders/received" onClick={handleLinkClick}>

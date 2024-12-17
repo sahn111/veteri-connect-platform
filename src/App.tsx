@@ -20,6 +20,7 @@ import Purchase from "./pages/Purchase";
 import Walkthrough from "./pages/Walkthrough";
 import ReceivedOrders from "./pages/ReceivedOrders";
 import PlacedOrders from "./pages/PlacedOrders";
+import ManageProducts from "./pages/ManageProducts";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="/dashboard/purchase" element={<Purchase />} />
             <Route path="/dashboard/orders/received" element={<ReceivedOrders />} />
             <Route path="/dashboard/orders/placed" element={<PlacedOrders />} />
+            <Route path="/dashboard/manage-products" element={<ManageProducts />} />
           </Routes>
         </BrowserRouter>
       </CartProvider>
