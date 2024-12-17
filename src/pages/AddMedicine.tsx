@@ -46,6 +46,16 @@ const AddMedicine = () => {
     },
   });
 
+  const helpContent = `
+    Yeni İlaç Ekleme sayfasında:
+    1. Tüm alanları eksiksiz doldurun
+    2. İlaç adı en az 2 karakter olmalıdır
+    3. Açıklama en az 10 karakter olmalıdır
+    4. Fiyat ve miktar pozitif sayı olmalıdır
+    5. Son kullanma tarihi gelecekte bir tarih olmalıdır
+    6. İptal butonu ile pazaryerine dönebilirsiniz
+  `;
+
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     // Burada API çağrısı yapılacak
     console.log(values);
@@ -54,7 +64,7 @@ const AddMedicine = () => {
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout helpContent={helpContent}>
       <div className="max-w-2xl mx-auto">
         <BackButton />
         <h1 className="text-2xl font-bold mb-6">Yeni İlaç Ekle</h1>

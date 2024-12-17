@@ -44,8 +44,17 @@ const MOCK_PLACED_ORDERS = [
 ];
 
 const PlacedOrders = () => {
+  const helpContent = `
+    Verilen Siparişler sayfasında:
+    1. Tüm siparişlerinizi tarih sırasıyla görebilirsiniz
+    2. Sipariş durumunu takip edebilirsiniz
+    3. Satıcıyla mesajlaşabilirsiniz
+    4. Satıcı profiline gidebilirsiniz
+    5. Sipariş detaylarını görüntüleyebilirsiniz
+  `;
+
   return (
-    <DashboardLayout>
+    <DashboardLayout helpContent={helpContent}>
       <div className="space-y-6">
         <BackButton />
         <div className="flex items-center justify-between">

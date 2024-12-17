@@ -59,9 +59,17 @@ const MOCK_MEDICINES = [
 const Marketplace = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  const helpContent = `
+    Pazaryeri sayfasında:
+    1. Üst kısımdaki arama çubuğunu kullanarak ilaç arayabilirsiniz
+    2. Her ilaç kartında detaylı bilgi ve satın alma seçenekleri bulunur
+    3. Sağ alttaki sepet butonu ile siparişlerinizi yönetebilirsiniz
+    4. İlaç kartlarındaki "Detaylar" butonu ile ürün hakkında daha fazla bilgi alabilirsiniz
+  `;
+
   return (
     <CartProvider>
-      <DashboardLayout>
+      <DashboardLayout helpContent={helpContent}>
         <div className="min-h-screen bg-muted/30 py-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1400px]">
             <div className="text-center space-y-4 mb-8">

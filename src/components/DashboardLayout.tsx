@@ -1,15 +1,22 @@
 import { useState } from "react";
 import { Sidebar } from "./Sidebar";
-import { Menu, X, ShoppingCart } from "lucide-react";
+import { Menu, X, ShoppingCart, HelpCircle } from "lucide-react";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Cart } from "./cart/Cart";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
+  helpContent?: string;
 }
 
-export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+export const DashboardLayout = ({ children, helpContent }: DashboardLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -50,6 +57,26 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           {children}
         </div>
       </main>
+
+      {/* Help Tooltip */}
+      {helpContent && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="fixed bottom-8 left-8 h-10 w-10 rounded-full shadow-lg z-50"
+              >
+                <HelpCircle className="h-5 w-5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="max-w-sm">
+              <p>{helpContent}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
 
       {/* Cart Button */}
       <Button

@@ -74,8 +74,16 @@ const Messages = () => {
     });
   };
 
+  const helpContent = `
+    Mesajlar sayfasında:
+    1. Tüm mesajlaşmalarınızı görebilirsiniz
+    2. Okunmamış mesajlar mavi çerçeve ile belirtilir
+    3. Bir mesaja tıklayarak tüm konuşmayı görüntüleyebilirsiniz
+    4. Mesajları yanıtlayabilir ve yeni mesajlar gönderebilirsiniz
+  `;
+
   return (
-    <DashboardLayout>
+    <DashboardLayout helpContent={helpContent}>
       <div className="space-y-6">
         <BackButton />
         <div className="flex items-center justify-between">

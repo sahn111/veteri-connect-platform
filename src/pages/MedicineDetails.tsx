@@ -26,8 +26,17 @@ const MedicineDetails = () => {
   const { id } = useParams();
   const medicine = MOCK_MEDICINE;
 
+  const helpContent = `
+    İlaç Detayları sayfasında:
+    1. İlacın tüm özelliklerini görebilirsiniz
+    2. Satıcı bilgilerine ulaşabilirsiniz
+    3. Satıcıyla iletişime geçebilirsiniz
+    4. Satıcının profilini görüntüleyebilirsiniz
+    5. Geri butonu ile önceki sayfaya dönebilirsiniz
+  `;
+
   return (
-    <DashboardLayout>
+    <DashboardLayout helpContent={helpContent}>
       <div className="max-w-4xl mx-auto">
         <BackButton />
         <div className="mb-6">
