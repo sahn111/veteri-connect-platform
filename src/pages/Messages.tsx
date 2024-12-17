@@ -1,9 +1,10 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { BackButton } from "@/components/BackButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MessageSquare, User, ArrowLeft } from "lucide-react";
+import { MessageSquare, User, ArrowLeft, Send } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
 const Messages = () => {
@@ -11,6 +12,7 @@ const Messages = () => {
     sender: string;
     messages: Array<{ text: string; sender: "user" | "other"; time: string }>;
   }>(null);
+  const [newMessage, setNewMessage] = useState("");
 
   const messages = [
     {
@@ -75,6 +77,22 @@ const Messages = () => {
     4. Mesajları yanıtlayabilir ve yeni mesajlar gönderebilirsiniz
   `;
 
+  const handleSendMessage = () => {
+    if (!newMessage.trim() || !selectedConversation) return;
+
+    const newMessageObj = {
+      text: newMessage,
+      sender: "user" as const,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+
+    setSelectedConversation({
+      ...selectedConversation,
+      messages: [...selectedConversation.messages, newMessageObj]
+    });
+    setNewMessage("");
+  };
+
   if (selectedConversation) {
     return (
       <DashboardLayout helpContent={helpContent}>
@@ -88,15 +106,15 @@ const Messages = () => {
             Geri Dön
           </Button>
           
-          <Card>
+          <Card className="flex flex-col h-[calc(100vh-12rem)]">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="h-5 w-5" />
                 {selectedConversation.sender} ile Mesajlaşma
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[600px] pr-4">
+            <CardContent className="flex-1 flex flex-col">
+              <ScrollArea className="flex-1 pr-4 mb-4">
                 <div className="space-y-4">
                   {selectedConversation.messages.map((msg, index) => (
                     <div
@@ -121,6 +139,29 @@ const Messages = () => {
                   ))}
                 </div>
               </ScrollArea>
+              
+              {/* Message Input Form */}
+              <div className="flex gap-2 pt-4 border-t">
+                <Input
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="Mesajınızı yazın..."
+                  className="flex-1"
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      handleSendMessage();
+                    }
+                  }}
+                />
+                <Button
+                  onClick={handleSendMessage}
+                  className="shrink-0"
+                  disabled={!newMessage.trim()}
+                >
+                  <Send className="h-4 w-4 mr-2" />
+                  Gönder
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
