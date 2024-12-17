@@ -7,57 +7,32 @@ import { useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-
-const MOCK_MEDICINES = [
-  {
-    id: 1,
-    name: "Amoksisilin",
-    description: "Geniş spektrumlu antibiyotik",
-    price: 299.99,
-    quantity: 100,
-    unit: "tablet",
-    expiryDate: "2024-12-31",
-    isActive: true,
-    seller: {
-      name: "Dr. Ayşe Yılmaz",
-      clinic: "Merkez Veteriner Kliniği",
-      location: "İstanbul"
-    }
-  },
-  {
-    id: 2,
-    name: "Rimadil",
-    description: "Anti-enflamatuar ilaç",
-    price: 459.99,
-    quantity: 50,
-    unit: "tablet",
-    expiryDate: "2024-10-15",
-    isActive: true,
-    seller: {
-      name: "Dr. Mehmet Demir",
-      clinic: "Hayat Veteriner Kliniği",
-      location: "Ankara"
-    }
-  },
-  {
-    id: 3,
-    name: "Frontline Plus",
-    description: "Pire ve kene önleyici",
-    price: 359.99,
-    quantity: 3,
-    unit: "doz",
-    expiryDate: "2025-06-30",
-    isActive: true,
-    seller: {
-      name: "Dr. Zeynep Kaya",
-      clinic: "Dostlar Veteriner Kliniği",
-      location: "İzmir"
-    }
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Medicine } from "@/components/medicine/types";
 
 const Marketplace = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const { data: medicines, isLoading } = useQuery({
+    queryKey: ['medicines'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('medicines')
+        .select(`
+          *,
+          seller:profiles(full_name, email)
+        `)
+        .eq('is_active', true);
+
+      if (error) {
+        console.error('Error fetching medicines:', error);
+        throw error;
+      }
+
+      return data as (Medicine & { seller: { full_name: string | null; email: string | null } })[];
+    },
+  });
 
   const helpContent = `
     Pazaryeri sayfasında:
@@ -88,8 +63,20 @@ const Marketplace = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-stretch justify-items-center">
-              {MOCK_MEDICINES.map((medicine) => (
-                <MedicineCard key={medicine.id} medicine={medicine} />
+              {isLoading ? (
+                <p className="text-center col-span-full">Yükleniyor...</p>
+              ) : medicines?.map((medicine) => (
+                <MedicineCard 
+                  key={medicine.id} 
+                  medicine={{
+                    ...medicine,
+                    seller: {
+                      name: medicine.seller.full_name || medicine.seller.email || 'İsimsiz Satıcı',
+                      clinic: '',
+                      location: ''
+                    }
+                  }} 
+                />
               ))}
             </div>
           </div>

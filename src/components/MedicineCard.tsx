@@ -4,25 +4,16 @@ import { Calendar, Package, MapPin, User, Plus, Minus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useCart } from "./cart/CartProvider";
-
-interface Medicine {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  quantity: number;
-  unit: string;
-  expiryDate: string;
-  isActive: boolean;
-  seller: {
-    name: string;
-    clinic: string;
-    location: string;
-  };
-}
+import { Medicine } from "./medicine/types";
 
 interface MedicineCardProps {
-  medicine: Medicine;
+  medicine: Medicine & {
+    seller: {
+      name: string;
+      clinic: string;
+      location: string;
+    };
+  };
 }
 
 export const MedicineCard = ({ medicine }: MedicineCardProps) => {
@@ -58,7 +49,7 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
           </div>
           <div className="flex items-center gap-3 bg-muted/50 p-3 rounded-lg">
             <Calendar className="h-5 w-5 text-primary flex-shrink-0" />
-            <span className="font-medium">Son Kullanma: {new Date(medicine.expiryDate).toLocaleDateString()}</span>
+            <span className="font-medium">Son Kullanma: {new Date(medicine.expiry_date).toLocaleDateString()}</span>
           </div>
         </div>
         
@@ -67,10 +58,12 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
             <User className="h-5 w-5 text-primary flex-shrink-0" />
             <span className="text-base font-medium">{medicine.seller.name}</span>
           </div>
-          <div className="flex items-center gap-3 p-3">
-            <MapPin className="h-5 w-5 text-primary flex-shrink-0" />
-            <span className="text-base font-medium">{medicine.seller.location}</span>
-          </div>
+          {medicine.seller.location && (
+            <div className="flex items-center gap-3 p-3">
+              <MapPin className="h-5 w-5 text-primary flex-shrink-0" />
+              <span className="text-base font-medium">{medicine.seller.location}</span>
+            </div>
+          )}
         </div>
       </CardContent>
       
