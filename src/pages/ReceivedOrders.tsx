@@ -14,24 +14,14 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Tables } from "@/integrations/supabase/types";
 
-interface Order {
-  id: string;
-  buyer_id: string;
-  status: string;
-  total_amount: number;
-  created_at: string;
-  buyer: {
-    full_name: string | null;
-    email: string | null;
-  };
-  order_items: {
-    quantity: number;
-    medicine: {
-      name: string;
-    };
-  }[];
-}
+type Order = Tables<"orders"> & {
+  buyer: Tables<"profiles">;
+  order_items: (Tables<"order_items"> & {
+    medicine: Pick<Tables<"medicines">, "name">;
+  })[];
+};
 
 const ReceivedOrders = () => {
   const { toast } = useToast();
@@ -40,16 +30,20 @@ const ReceivedOrders = () => {
   const { data: orders = [], isLoading } = useQuery({
     queryKey: ['receivedOrders'],
     queryFn: async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error("Not authenticated");
+
       const { data, error } = await supabase
         .from('orders')
         .select(`
           *,
-          buyer:profiles(full_name, email),
+          buyer:profiles!orders_buyer_id_fkey(full_name, email),
           order_items(
             quantity,
             medicine:medicines(name)
           )
         `)
+        .eq('seller_id', userData.user.id)
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -143,7 +137,7 @@ const ReceivedOrders = () => {
                     {order.buyer?.full_name || order.buyer?.email || "İsimsiz Müşteri"}
                   </TableCell>
                   <TableCell>
-                    {order.order_items[0]?.medicine.name || "Bilinmeyen Ürün"}
+                    {order.order_items[0]?.medicine?.name || "Bilinmeyen Ürün"}
                   </TableCell>
                   <TableCell>
                     {order.order_items[0]?.quantity || 0}

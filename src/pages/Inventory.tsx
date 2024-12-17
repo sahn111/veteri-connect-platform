@@ -6,21 +6,14 @@ import { InventorySearch } from "@/components/inventory/InventorySearch";
 import { InventoryTable } from "@/components/inventory/InventoryTable";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Tables } from "@/integrations/supabase/types";
 
-interface InventoryItem {
-  id: string;
-  name: string;
-  quantity: number;
-  unit: string;
-  min_stock: number;
-  expiry_date: string;
-  is_active: boolean;
-}
+type InventoryItem = Tables<"inventory">;
 
 const Inventory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editedItem, setEditedItem] = useState<any>(null);
+  const [editedItem, setEditedItem] = useState<InventoryItem | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -41,7 +34,7 @@ const Inventory = () => {
         throw error;
       }
 
-      return data as InventoryItem[];
+      return data;
     },
   });
 
