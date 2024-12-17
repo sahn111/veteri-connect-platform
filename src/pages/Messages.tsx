@@ -1,13 +1,13 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { BackButton } from "@/components/BackButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MessageSquare, User } from "lucide-react";
+import { MessageSquare, User, ArrowLeft } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const Messages = () => {
-  const [selectedMessage, setSelectedMessage] = useState<null | {
+  const [selectedConversation, setSelectedConversation] = useState<null | {
     sender: string;
     messages: Array<{ text: string; sender: "user" | "other"; time: string }>;
   }>(null);
@@ -67,20 +67,66 @@ const Messages = () => {
     },
   ];
 
-  const handleMessageClick = (message: typeof messages[0]) => {
-    setSelectedMessage({
-      sender: message.sender,
-      messages: message.conversation
-    });
-  };
-
   const helpContent = `
     Mesajlar sayfasında:
     1. Tüm mesajlaşmalarınızı görebilirsiniz
     2. Okunmamış mesajlar mavi çerçeve ile belirtilir
-    3. Bir mesaja tıklayarak tüm konuşmayı görüntüleyebilirsiniz
+    3. Bir mesaja tıklayarak direkt mesajlaşma ekranına geçebilirsiniz
     4. Mesajları yanıtlayabilir ve yeni mesajlar gönderebilirsiniz
   `;
+
+  if (selectedConversation) {
+    return (
+      <DashboardLayout helpContent={helpContent}>
+        <div className="space-y-6">
+          <Button
+            variant="ghost"
+            onClick={() => setSelectedConversation(null)}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Geri Dön
+          </Button>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User className="h-5 w-5" />
+                {selectedConversation.sender} ile Mesajlaşma
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[600px] pr-4">
+                <div className="space-y-4">
+                  {selectedConversation.messages.map((msg, index) => (
+                    <div
+                      key={index}
+                      className={`flex ${
+                        msg.sender === "user" ? "justify-end" : "justify-start"
+                      }`}
+                    >
+                      <div
+                        className={`max-w-[80%] rounded-lg p-3 ${
+                          msg.sender === "user"
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted"
+                        }`}
+                      >
+                        <p className="text-sm">{msg.text}</p>
+                        <span className="text-xs opacity-70 mt-1 block">
+                          {msg.time}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout helpContent={helpContent}>
@@ -106,7 +152,10 @@ const Messages = () => {
                     className={`cursor-pointer transition-colors hover:bg-muted/50 ${
                       !message.isRead ? "border-primary" : ""
                     }`}
-                    onClick={() => handleMessageClick(message)}
+                    onClick={() => setSelectedConversation({
+                      sender: message.sender,
+                      messages: message.conversation
+                    })}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start gap-4">
@@ -133,41 +182,6 @@ const Messages = () => {
           </CardContent>
         </Card>
       </div>
-
-      <Dialog open={selectedMessage !== null} onOpenChange={() => setSelectedMessage(null)}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>{selectedMessage?.sender} ile Mesajlaşma</DialogTitle>
-            <DialogDescription>
-              <ScrollArea className="h-[400px] pr-4">
-                <div className="space-y-4">
-                  {selectedMessage?.messages.map((msg, index) => (
-                    <div
-                      key={index}
-                      className={`flex ${
-                        msg.sender === "user" ? "justify-end" : "justify-start"
-                      }`}
-                    >
-                      <div
-                        className={`max-w-[80%] rounded-lg p-3 ${
-                          msg.sender === "user"
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted"
-                        }`}
-                      >
-                        <p className="text-sm">{msg.text}</p>
-                        <span className="text-xs opacity-70 mt-1 block">
-                          {msg.time}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
     </DashboardLayout>
   );
 };
