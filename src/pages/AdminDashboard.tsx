@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Activity, Users, ShoppingBag, AlertCircle } from "lucide-react";
+import { Activity, Users, AlertCircle } from "lucide-react";
 import { AdminUserList } from "@/components/admin/AdminUserList";
 import { AdminActivityLog } from "@/components/admin/AdminActivityLog";
 import { useQuery } from "@tanstack/react-query";
@@ -13,7 +13,7 @@ const AdminDashboard = () => {
   const { toast } = useToast();
 
   // Check if user is authenticated and has admin role
-  const { data: profile, isLoading } = useQuery({
+  const { data: profile, isLoading: isProfileLoading } = useQuery({
     queryKey: ['admin-profile'],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -32,6 +32,31 @@ const AdminDashboard = () => {
       return profile;
     },
   });
+
+  // Fetch stats
+  const { data: stats, isLoading: isStatsLoading } = useQuery({
+    queryKey: ['admin-stats'],
+    queryFn: async () => {
+      const { data: totalUsers, error: totalError } = await supabase
+        .from('profiles')
+        .select('id', { count: 'exact' });
+
+      const { data: activeUsers, error: activeError } = await supabase
+        .from('profiles')
+        .select('id', { count: 'exact' })
+        .eq('status', 'active');
+
+      if (totalError || activeError) throw totalError || activeError;
+
+      return {
+        totalUsers: totalUsers?.length || 0,
+        activeUsers: activeUsers?.length || 0
+      };
+    },
+    enabled: !!profile && profile.role === 'admin',
+  });
+
+  const isLoading = isProfileLoading || isStatsLoading;
 
   useEffect(() => {
     if (!isLoading && (!profile || profile.role !== 'admin')) {
