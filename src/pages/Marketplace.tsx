@@ -20,11 +20,7 @@ const Marketplace = () => {
           price,
           quantity,
           unit,
-          expiry_date,
-          seller:profiles(
-            full_name,
-            email
-          )
+          expiry_date
         `);
 
       if (error) {
@@ -32,12 +28,7 @@ const Marketplace = () => {
         throw error;
       }
 
-      return data as (Medicine & {
-        seller: {
-          full_name: string | null;
-          email: string | null;
-        }
-      })[];
+      return data as Medicine[];
     },
   });
 
@@ -75,7 +66,13 @@ const Marketplace = () => {
               ) : medicines?.map((medicine) => (
                 <MedicineCard 
                   key={medicine.id} 
-                  medicine={medicine}
+                  medicine={{
+                    ...medicine,
+                    seller: {
+                      full_name: null,
+                      email: null
+                    }
+                  }}
                 />
               ))}
             </div>
