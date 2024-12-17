@@ -12,6 +12,8 @@ interface MedicineCardProps {
       name: string;
       clinic: string;
       location: string;
+      full_name: string | null;
+      email: string | null;
     };
   };
 }
@@ -24,7 +26,7 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
     addToCart({
       id: medicine.id,
       name: medicine.name,
-      price: medicine.price,
+      price: Number(medicine.price),
       quantity: quantity,
       unit: medicine.unit,
     });
@@ -56,7 +58,7 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
         <div className="space-y-4 border-t pt-6">
           <div className="flex items-center gap-3 p-3">
             <User className="h-5 w-5 text-primary flex-shrink-0" />
-            <span className="text-base font-medium">{medicine.seller.name}</span>
+            <span className="text-base font-medium">{medicine.seller.name || medicine.seller.full_name || medicine.seller.email}</span>
           </div>
           {medicine.seller.location && (
             <div className="flex items-center gap-3 p-3">
@@ -70,7 +72,7 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
       <CardFooter className="flex flex-col space-y-6 border-t p-6">
         <div className="flex flex-col space-y-4 w-full">
           <span className="text-2xl font-bold text-primary">
-            {medicine.price.toLocaleString('tr-TR')} ₺
+            {Number(medicine.price).toLocaleString('tr-TR')} ₺
           </span>
           <div className="flex items-center border rounded-lg bg-muted/50 w-fit">
             <Button

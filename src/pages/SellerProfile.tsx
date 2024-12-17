@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { MedicineCard } from "@/components/MedicineCard";
 import { MapPin, Mail, Phone, Building, Award, MessageSquare } from "lucide-react";
 import { useParams } from "react-router-dom";
+import { Medicine } from "@/components/medicine/types";
 
 // Mock data - gerçek uygulamada API'den gelecek
 const MOCK_SELLER = {
-  id: 1,
+  id: "1",
   name: "Dr. Ayşe Yılmaz",
   clinic: "Merkez Veteriner Kliniği",
   location: "İstanbul, Kadıköy",
@@ -18,36 +19,54 @@ const MOCK_SELLER = {
   about: "10 yıllık veteriner hekim tecrübesiyle küçük ve büyük hayvanların tedavisinde uzmanlaşmış bir profesyonel.",
   medicines: [
     {
-      id: 1,
+      id: "1",
       name: "Amoksisilin",
       description: "Geniş spektrumlu antibiyotik",
       price: 299.99,
       quantity: 100,
       unit: "tablet",
-      expiryDate: "2024-12-31",
-      isActive: true,
+      expiry_date: "2024-12-31",
+      is_active: true,
+      seller_id: "1",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
       seller: {
         name: "Dr. Ayşe Yılmaz",
         clinic: "Merkez Veteriner Kliniği",
-        location: "İstanbul"
+        location: "İstanbul",
+        full_name: "Dr. Ayşe Yılmaz",
+        email: "ayse.yilmaz@vetmedex.com"
       }
     },
     {
-      id: 2,
+      id: "2",
       name: "Rimadil",
       description: "Anti-enflamatuar ilaç",
       price: 459.99,
       quantity: 50,
       unit: "tablet",
-      expiryDate: "2024-10-15",
-      isActive: true,
+      expiry_date: "2024-10-15",
+      is_active: true,
+      seller_id: "1",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
       seller: {
         name: "Dr. Ayşe Yılmaz",
         clinic: "Merkez Veteriner Kliniği",
-        location: "İstanbul"
+        location: "İstanbul",
+        full_name: "Dr. Ayşe Yılmaz",
+        email: "ayse.yilmaz@vetmedex.com"
       }
     }
-  ]
+  ] as (Medicine & {
+    seller: {
+      name: string;
+      clinic: string;
+      location: string;
+      full_name: string;
+      email: string;
+    };
+  })[]
 };
 
 const SellerProfile = () => {

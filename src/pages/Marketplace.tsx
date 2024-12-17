@@ -73,7 +73,8 @@ const Marketplace = () => {
                     seller: {
                       name: medicine.seller.full_name || medicine.seller.email || 'İsimsiz Satıcı',
                       clinic: '',
-                      location: ''
+                      location: '',
+                      ...medicine.seller
                     }
                   }} 
                 />
