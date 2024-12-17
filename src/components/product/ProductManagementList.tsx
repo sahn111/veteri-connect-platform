@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Product, PriceChangeConfig } from "./types";
 import { PriceManagement } from "./PriceManagement";
 import { ProductDetails } from "./ProductDetails";
+import { AddProductForm } from "./AddProductForm";
 
 // Mock inventory data - gerçek uygulamada API'den gelecek
 const MOCK_INVENTORY = [
@@ -113,8 +114,14 @@ export const ProductManagementList = () => {
     });
   };
 
+  const handleAddProduct = (newProduct: Omit<Product, "id">) => {
+    const newId = Math.max(...products.map(p => p.id)) + 1;
+    setProducts([...products, { ...newProduct, id: newId }]);
+  };
+
   return (
     <div className="space-y-6">
+      <AddProductForm onAdd={handleAddProduct} />
       <div className="grid grid-cols-1 gap-6">
         {products.map((product) => (
           <Card key={product.id}>
