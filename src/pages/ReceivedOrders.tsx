@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Package, CheckCircle2, XCircle } from "lucide-react";
+import { CheckCircle2, XCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 // Mock data - gerçek uygulamada API'den gelecek
@@ -74,7 +74,10 @@ const ReceivedOrders = () => {
             </TableHeader>
             <TableBody>
               {MOCK_RECEIVED_ORDERS.map((order) => (
-                <TableRow key={order.id}>
+                <TableRow 
+                  key={order.id}
+                  className={order.status === "pending" ? "animate-blink" : ""}
+                >
                   <TableCell>{order.id}</TableCell>
                   <TableCell>{order.customerName}</TableCell>
                   <TableCell>{order.product}</TableCell>

@@ -55,9 +55,18 @@ export default {
             transform: "translateY(0)",
           },
         },
+        "blink": {
+          "0%, 100%": {
+            opacity: "1",
+          },
+          "50%": {
+            opacity: "0.5",
+          },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.5s ease-out",
+        "blink": "blink 1s ease-in-out infinite",
       },
     },
   },
