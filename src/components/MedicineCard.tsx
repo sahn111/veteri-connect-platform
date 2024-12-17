@@ -9,9 +9,6 @@ import { Medicine } from "./medicine/types";
 interface MedicineCardProps {
   medicine: Medicine & {
     seller: {
-      name: string;
-      clinic: string;
-      location: string;
       full_name: string | null;
       email: string | null;
     };
@@ -31,6 +28,8 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
       unit: medicine.unit,
     });
   };
+
+  const sellerDisplayName = medicine.seller.full_name || medicine.seller.email || 'İsimsiz Satıcı';
 
   return (
     <Card className="w-full max-w-[400px] bg-white hover:shadow-lg transition-all duration-200 animate-fade-up">
@@ -58,14 +57,8 @@ export const MedicineCard = ({ medicine }: MedicineCardProps) => {
         <div className="space-y-4 border-t pt-6">
           <div className="flex items-center gap-3 p-3">
             <User className="h-5 w-5 text-primary flex-shrink-0" />
-            <span className="text-base font-medium">{medicine.seller.name || medicine.seller.full_name || medicine.seller.email}</span>
+            <span className="text-base font-medium">{sellerDisplayName}</span>
           </div>
-          {medicine.seller.location && (
-            <div className="flex items-center gap-3 p-3">
-              <MapPin className="h-5 w-5 text-primary flex-shrink-0" />
-              <span className="text-base font-medium">{medicine.seller.location}</span>
-            </div>
-          )}
         </div>
       </CardContent>
       

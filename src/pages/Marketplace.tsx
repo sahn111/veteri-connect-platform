@@ -2,31 +2,42 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { SearchBar } from "@/components/SearchBar";
 import { MedicineCard } from "@/components/MedicineCard";
 import { CartProvider } from "@/components/cart/CartProvider";
-import { Cart } from "@/components/cart/Cart";
 import { useState } from "react";
-import { ShoppingCart } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Medicine } from "@/components/medicine/types";
 
 const Marketplace = () => {
-  const [isCartOpen, setIsCartOpen] = useState(false);
-
   const { data: medicines, isLoading } = useQuery({
     queryKey: ['medicines'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('medicines')
-        .select('id, name, price, quantity, unit');
+        .select(`
+          id,
+          name,
+          description,
+          price,
+          quantity,
+          unit,
+          expiry_date,
+          seller:profiles(
+            full_name,
+            email
+          )
+        `);
 
       if (error) {
         console.error('Error fetching medicines:', error);
         throw error;
       }
 
-      return data as Medicine[];
+      return data as (Medicine & {
+        seller: {
+          full_name: string | null;
+          email: string | null;
+        }
+      })[];
     },
   });
 
