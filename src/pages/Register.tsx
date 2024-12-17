@@ -36,14 +36,14 @@ const Register = () => {
           Ana Sayfaya Dön
         </Link>
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">Create your account</h2>
-          <p className="mt-2 text-gray-600">Join our trusted veterinary community</p>
+          <h2 className="text-3xl font-bold text-gray-900">Hesap Oluştur</h2>
+          <p className="mt-2 text-gray-600">Güvenilir veteriner topluluğumuza katılın</p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="space-y-4">
             <div>
-              <Label htmlFor="fullName">Full Name</Label>
+              <Label htmlFor="fullName">Ad Soyad</Label>
               <Input
                 id="fullName"
                 name="fullName"
@@ -56,7 +56,7 @@ const Register = () => {
             </div>
 
             <div>
-              <Label htmlFor="email">Email address</Label>
+              <Label htmlFor="email">E-posta Adresi</Label>
               <Input
                 id="email"
                 name="email"
@@ -69,7 +69,7 @@ const Register = () => {
             </div>
 
             <div>
-              <Label htmlFor="licenseNumber">Veterinary License Number</Label>
+              <Label htmlFor="licenseNumber">Veteriner Lisans Numarası</Label>
               <Input
                 id="licenseNumber"
                 name="licenseNumber"
@@ -82,7 +82,7 @@ const Register = () => {
             </div>
 
             <div>
-              <Label htmlFor="practiceDetails">Practice Details</Label>
+              <Label htmlFor="practiceDetails">Klinik Bilgileri</Label>
               <textarea
                 id="practiceDetails"
                 name="practiceDetails"
@@ -95,7 +95,7 @@ const Register = () => {
             </div>
 
             <div>
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Şifre</Label>
               <Input
                 id="password"
                 name="password"
@@ -108,7 +108,7 @@ const Register = () => {
             </div>
 
             <div>
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Label htmlFor="confirmPassword">Şifre Tekrar</Label>
               <Input
                 id="confirmPassword"
                 name="confirmPassword"
@@ -123,14 +123,14 @@ const Register = () => {
 
           <Button type="submit" className="w-full" size="lg">
             <UserPlus className="mr-2" />
-            Register
+            Kayıt Ol
           </Button>
 
           <p className="text-center text-sm text-gray-600">
-            Already have an account?{" "}
-            <a href="/login" className="font-medium text-primary hover:text-primary/80">
-              Sign in
-            </a>
+            Zaten hesabınız var mı?{" "}
+            <Link to="/login" className="font-medium text-primary hover:text-primary/80">
+              Giriş yapın
+            </Link>
           </p>
         </form>
       </div>

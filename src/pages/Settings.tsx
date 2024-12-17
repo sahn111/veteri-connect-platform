@@ -12,32 +12,32 @@ const Settings = () => {
       <div className="space-y-6">
         <BackButton />
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Settings</h1>
+          <h1 className="text-3xl font-bold">Ayarlar</h1>
         </div>
 
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <SettingsIcon className="h-5 w-5" />
-              Preferences
+              Tercihler
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="notifications">Email Notifications</Label>
+                  <Label htmlFor="notifications">E-posta Bildirimleri</Label>
                   <p className="text-sm text-muted-foreground">
-                    Receive email notifications about new messages and orders
+                    Yeni mesajlar ve siparişler hakkında e-posta bildirimleri alın
                   </p>
                 </div>
                 <Switch id="notifications" />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="marketing">Marketing Communications</Label>
+                  <Label htmlFor="marketing">Pazarlama İletişimi</Label>
                   <p className="text-sm text-muted-foreground">
-                    Receive updates about new features and promotions
+                    Yeni özellikler ve kampanyalar hakkında güncellemeler alın
                   </p>
                 </div>
                 <Switch id="marketing" />

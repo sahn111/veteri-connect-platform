@@ -12,37 +12,37 @@ const Profile = () => {
       <div className="space-y-6">
         <BackButton />
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Profile</h1>
+          <h1 className="text-3xl font-bold">Profil</h1>
         </div>
 
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <User className="h-5 w-5" />
-              Personal Information
+              Kişisel Bilgiler
             </CardTitle>
           </CardHeader>
           <CardContent>
             <form className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input id="name" placeholder="Enter your full name" />
+                  <Label htmlFor="name">Ad Soyad</Label>
+                  <Input id="name" placeholder="Adınızı ve soyadınızı girin" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="Enter your email" />
+                  <Label htmlFor="email">E-posta</Label>
+                  <Input id="email" type="email" placeholder="E-posta adresinizi girin" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Phone</Label>
-                  <Input id="phone" type="tel" placeholder="Enter your phone number" />
+                  <Label htmlFor="phone">Telefon</Label>
+                  <Input id="phone" type="tel" placeholder="Telefon numaranızı girin" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="license">Veterinary License Number</Label>
-                  <Input id="license" placeholder="Enter your license number" />
+                  <Label htmlFor="license">Veteriner Lisans Numarası</Label>
+                  <Input id="license" placeholder="Lisans numaranızı girin" />
                 </div>
               </div>
-              <Button type="submit">Save Changes</Button>
+              <Button type="submit">Değişiklikleri Kaydet</Button>
             </form>
           </CardContent>
         </Card>
