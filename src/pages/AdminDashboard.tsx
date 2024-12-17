@@ -3,8 +3,29 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { Activity, Users, ShoppingBag, AlertCircle } from "lucide-react";
 import { AdminUserList } from "@/components/admin/AdminUserList";
 import { AdminActivityLog } from "@/components/admin/AdminActivityLog";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const AdminDashboard = () => {
+  const { data: stats } = useQuery({
+    queryKey: ['admin-stats'],
+    queryFn: async () => {
+      const { count: totalUsers } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true });
+
+      const { count: activeUsers } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'active');
+
+      return {
+        totalUsers: totalUsers || 0,
+        activeUsers: activeUsers || 0,
+      };
+    },
+  });
+
   return (
     <DashboardLayout>
       <div className="p-6">
@@ -18,19 +39,19 @@ const AdminDashboard = () => {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">127</div>
-              <p className="text-xs text-muted-foreground">+5 bu hafta</p>
+              <div className="text-2xl font-bold">{stats?.totalUsers || 0}</div>
+              <p className="text-xs text-muted-foreground">Kayıtlı kullanıcı sayısı</p>
             </CardContent>
           </Card>
           
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Aktif İlanlar</CardTitle>
-              <ShoppingBag className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Aktif Kullanıcılar</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">45</div>
-              <p className="text-xs text-muted-foreground">+12 bu ay</p>
+              <div className="text-2xl font-bold">{stats?.activeUsers || 0}</div>
+              <p className="text-xs text-muted-foreground">Aktif kullanıcı sayısı</p>
             </CardContent>
           </Card>
           
@@ -40,8 +61,8 @@ const AdminDashboard = () => {
               <Activity className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">24</div>
-              <p className="text-xs text-muted-foreground">%15 artış</p>
+              <div className="text-2xl font-bold">-</div>
+              <p className="text-xs text-muted-foreground">Günlük işlem sayısı</p>
             </CardContent>
           </Card>
           
@@ -51,7 +72,7 @@ const AdminDashboard = () => {
               <AlertCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">3</div>
+              <div className="text-2xl font-bold">-</div>
               <p className="text-xs text-muted-foreground">İncelenmesi gereken</p>
             </CardContent>
           </Card>
