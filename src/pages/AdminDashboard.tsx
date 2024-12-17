@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import DashboardLayout from "@/components/DashboardLayout";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import { Activity, Users, ShoppingBag, AlertCircle } from "lucide-react";
 import { AdminUserList } from "@/components/admin/AdminUserList";
 import { AdminActivityLog } from "@/components/admin/AdminActivityLog";
