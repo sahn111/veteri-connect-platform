@@ -54,29 +54,28 @@ export const DashboardLayout = ({ children, helpContent }: DashboardLayoutProps)
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto bg-muted p-4 lg:p-8 w-full lg:pl-64">
         <div className="max-w-[1600px] mx-auto pt-14 lg:pt-0">
+          {/* Help Tooltip */}
+          {helpContent && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="fixed top-8 right-24 h-10 w-10 rounded-full shadow-lg z-50"
+                  >
+                    <HelpCircle className="h-5 w-5" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="left" className="max-w-sm">
+                  <p>{helpContent}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
           {children}
         </div>
       </main>
-
-      {/* Help Tooltip */}
-      {helpContent && (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="fixed bottom-8 left-8 h-10 w-10 rounded-full shadow-lg z-50"
-              >
-                <HelpCircle className="h-5 w-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right" className="max-w-sm">
-              <p>{helpContent}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      )}
 
       {/* Cart Button */}
       <Button
