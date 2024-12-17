@@ -20,9 +20,13 @@ const Inventory = () => {
   const { data: inventory = [], isLoading } = useQuery({
     queryKey: ['inventory'],
     queryFn: async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error("Not authenticated");
+
       const { data, error } = await supabase
         .from('inventory')
         .select('*')
+        .eq('owner_id', userData.user.id)
         .order('name');
 
       if (error) {

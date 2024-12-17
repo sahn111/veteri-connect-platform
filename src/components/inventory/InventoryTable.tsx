@@ -10,25 +10,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Edit, Save, X } from "lucide-react";
+import { Tables } from "@/integrations/supabase/types";
 
-interface InventoryItem {
-  id: number;
-  name: string;
-  quantity: number;
-  unit: string;
-  minStock: number;
-  expiryDate: string;
-  isActive: boolean;
-}
+type InventoryItem = Tables<"inventory">;
 
 interface InventoryTableProps {
   inventory: InventoryItem[];
-  editingId: number | null;
+  editingId: string | null;
   editedItem: InventoryItem | null;
   handleEdit: (item: InventoryItem) => void;
   handleSave: () => void;
   handleCancel: () => void;
-  handleStatusChange: (id: number, isActive: boolean) => void;
+  handleStatusChange: (id: string, isActive: boolean) => void;
   setEditedItem: (item: InventoryItem) => void;
 }
 
@@ -100,43 +93,43 @@ export const InventoryTable = ({
                 {editingId === item.id ? (
                   <Input
                     type="number"
-                    value={editedItem?.minStock}
+                    value={editedItem?.min_stock}
                     onChange={(e) =>
                       setEditedItem({
                         ...editedItem!,
-                        minStock: parseInt(e.target.value),
+                        min_stock: parseInt(e.target.value),
                       })
                     }
                   />
                 ) : (
-                  `${item.minStock} ${item.unit}`
+                  `${item.min_stock} ${item.unit}`
                 )}
               </TableCell>
               <TableCell>
                 {editingId === item.id ? (
                   <Input
                     type="date"
-                    value={editedItem?.expiryDate}
+                    value={editedItem?.expiry_date}
                     onChange={(e) =>
                       setEditedItem({
                         ...editedItem!,
-                        expiryDate: e.target.value,
+                        expiry_date: e.target.value,
                       })
                     }
                   />
                 ) : (
-                  new Date(item.expiryDate).toLocaleDateString()
+                  new Date(item.expiry_date).toLocaleDateString()
                 )}
               </TableCell>
               <TableCell>
                 <div className="flex items-center space-x-2">
                   <Switch
-                    checked={item.isActive}
+                    checked={item.is_active}
                     onCheckedChange={(checked) =>
                       handleStatusChange(item.id, checked)
                     }
                   />
-                  <span>{item.isActive ? "Aktif" : "Pasif"}</span>
+                  <span>{item.is_active ? "Aktif" : "Pasif"}</span>
                 </div>
               </TableCell>
               <TableCell className="text-right">
