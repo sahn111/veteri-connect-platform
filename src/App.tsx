@@ -21,6 +21,7 @@ import Walkthrough from "./pages/Walkthrough";
 import ReceivedOrders from "./pages/ReceivedOrders";
 import PlacedOrders from "./pages/PlacedOrders";
 import ManageProducts from "./pages/ManageProducts";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/dashboard/orders/received" element={<ReceivedOrders />} />
             <Route path="/dashboard/orders/placed" element={<PlacedOrders />} />
             <Route path="/dashboard/manage-products" element={<ManageProducts />} />
+            <Route path="/admin" element={<AdminDashboard />} />
           </Routes>
         </BrowserRouter>
       </CartProvider>
