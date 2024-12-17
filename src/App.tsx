@@ -2,8 +2,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "./components/cart/CartProvider";
+import { createClient } from '@supabase/supabase-js';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { supabase } from "./integrations/supabase/client";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -27,35 +30,75 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <CartProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/walkthrough" element={<Walkthrough />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/dashboard/marketplace" element={<Marketplace />} />
-            <Route path="/dashboard/marketplace/add" element={<AddMedicine />} />
-            <Route path="/dashboard/marketplace/:id" element={<MedicineDetails />} />
-            <Route path="/dashboard/marketplace/seller/:id" element={<SellerProfile />} />
-            <Route path="/dashboard/messages" element={<Messages />} />
-            <Route path="/dashboard/profile" element={<Profile />} />
-            <Route path="/dashboard/settings" element={<Settings />} />
-            <Route path="/dashboard/inventory" element={<Inventory />} />
-            <Route path="/dashboard/purchase" element={<Purchase />} />
-            <Route path="/dashboard/orders/received" element={<ReceivedOrders />} />
-            <Route path="/dashboard/orders/placed" element={<PlacedOrders />} />
-            <Route path="/dashboard/manage-products" element={<ManageProducts />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-          </Routes>
-        </BrowserRouter>
-      </CartProvider>
-    </TooltipProvider>
+    <SessionContextProvider supabaseClient={supabase}>
+      <TooltipProvider>
+        <CartProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/walkthrough" element={<Walkthrough />} />
+              <Route path="/dashboard/*" element={<ProtectedRoute />} />
+              <Route path="/admin" element={<AdminProtectedRoute />} />
+            </Routes>
+          </BrowserRouter>
+        </CartProvider>
+      </TooltipProvider>
+    </SessionContextProvider>
   </QueryClientProvider>
 );
+
+const ProtectedRoute = () => {
+  const session = useSession();
+  
+  if (!session) {
+    return <Navigate to="/login" />;
+  }
+
+  return (
+    <Routes>
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/marketplace" element={<Marketplace />} />
+      <Route path="/marketplace/add" element={<AddMedicine />} />
+      <Route path="/marketplace/:id" element={<MedicineDetails />} />
+      <Route path="/marketplace/seller/:id" element={<SellerProfile />} />
+      <Route path="/messages" element={<Messages />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="/inventory" element={<Inventory />} />
+      <Route path="/purchase" element={<Purchase />} />
+      <Route path="/orders/received" element={<ReceivedOrders />} />
+      <Route path="/orders/placed" element={<PlacedOrders />} />
+      <Route path="/manage-products" element={<ManageProducts />} />
+    </Routes>
+  );
+};
+
+const AdminProtectedRoute = () => {
+  const { data: profile } = useQuery({
+    queryKey: ['profile'],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      return profile;
+    },
+  });
+
+  if (!profile?.is_admin) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  return <AdminDashboard />;
+};
 
 export default App;

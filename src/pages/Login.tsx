@@ -5,6 +5,7 @@ import { LogIn } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -15,19 +16,38 @@ const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isResetMode) {
-      // Password reset logic will be implemented with Supabase
-      toast({
-        title: "Şifre sıfırlama bağlantısı gönderildi",
-        description: "Lütfen e-posta kutunuzu kontrol edin.",
-      });
-      setIsResetMode(false);
+      const { error } = await supabase.auth.resetPasswordForEmail(credentials.email);
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message,
+        });
+      } else {
+        toast({
+          title: "Password reset email sent",
+          description: "Please check your email for the reset link.",
+        });
+        setIsResetMode(false);
+      }
     } else {
-      // Login logic will be implemented with Supabase
-      console.log("Login attempted:", credentials);
-      navigate("/dashboard");
+      const { error } = await supabase.auth.signInWithPassword({
+        email: credentials.email,
+        password: credentials.password,
+      });
+
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Error signing in",
+          description: error.message,
+        });
+      } else {
+        navigate("/dashboard");
+      }
     }
   };
 

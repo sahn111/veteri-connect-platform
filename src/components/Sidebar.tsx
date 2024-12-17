@@ -1,7 +1,9 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { User, ShoppingCart, MessageSquare, Settings, LogOut, Package, ClipboardList, DollarSign } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "./ui/use-toast";
 
 interface SidebarProps {
   onClose?: () => void;
@@ -9,6 +11,8 @@ interface SidebarProps {
 
 export const Sidebar = ({ onClose }: SidebarProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const isActive = (path: string) => {
     return location.pathname.startsWith(path);
@@ -17,6 +21,19 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
   const handleLinkClick = () => {
     if (onClose) {
       onClose();
+    }
+  };
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error signing out",
+        description: error.message,
+      });
+    } else {
+      navigate("/login");
     }
   };
 
@@ -133,7 +150,7 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
           <Button 
             variant="ghost" 
             className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50"
-            onClick={handleLinkClick}
+            onClick={handleLogout}
           >
             <LogOut className="mr-2 h-4 w-4" />
             Çıkış Yap
