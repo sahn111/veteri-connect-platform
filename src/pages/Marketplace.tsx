@@ -21,16 +21,29 @@ const Marketplace = () => {
         .from('medicines')
         .select(`
           *,
-          seller:profiles(full_name, email)
-        `)
-        .eq('is_active', true);
+          seller:profiles(
+            full_name,
+            email,
+            name:full_name,
+            clinic:full_name,
+            location:full_name
+          )
+        `);
 
       if (error) {
         console.error('Error fetching medicines:', error);
         throw error;
       }
 
-      return data as (Medicine & { seller: { full_name: string | null; email: string | null } })[];
+      return data as (Medicine & { 
+        seller: { 
+          name: string | null;
+          clinic: string | null;
+          location: string | null;
+          full_name: string | null;
+          email: string | null;
+        } 
+      })[];
     },
   });
 
@@ -68,15 +81,7 @@ const Marketplace = () => {
               ) : medicines?.map((medicine) => (
                 <MedicineCard 
                   key={medicine.id} 
-                  medicine={{
-                    ...medicine,
-                    seller: {
-                      name: medicine.seller.full_name || medicine.seller.email || 'İsimsiz Satıcı',
-                      clinic: '',
-                      location: '',
-                      ...medicine.seller
-                    }
-                  }} 
+                  medicine={medicine}
                 />
               ))}
             </div>
