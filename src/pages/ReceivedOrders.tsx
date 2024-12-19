@@ -12,92 +12,67 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Tables } from "@/integrations/supabase/types";
 
-type Order = Tables<"orders"> & {
-  buyer: Tables<"profiles">;
-  order_items: (Tables<"order_items"> & {
-    medicine: Pick<Tables<"medicines">, "name">;
-  })[];
-};
+const sampleOrders = [
+  {
+    id: "1",
+    buyer: {
+      full_name: "Ahmet Yılmaz",
+      email: "ahmet@example.com"
+    },
+    order_items: [
+      {
+        medicine: { name: "Vitamin C" },
+        quantity: 2
+      }
+    ],
+    total_amount: 150.00,
+    created_at: "2024-03-15T10:00:00Z",
+    status: "pending"
+  },
+  {
+    id: "2",
+    buyer: {
+      full_name: "Mehmet Demir",
+      email: "mehmet@example.com"
+    },
+    order_items: [
+      {
+        medicine: { name: "Aspirin" },
+        quantity: 1
+      }
+    ],
+    total_amount: 75.50,
+    created_at: "2024-03-14T15:30:00Z",
+    status: "shipped"
+  },
+  {
+    id: "3",
+    buyer: {
+      full_name: "Ayşe Kaya",
+      email: "ayse@example.com"
+    },
+    order_items: [
+      {
+        medicine: { name: "Parol" },
+        quantity: 3
+      }
+    ],
+    total_amount: 225.00,
+    created_at: "2024-03-13T09:15:00Z",
+    status: "pending"
+  }
+];
 
 const ReceivedOrders = () => {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
-
-  const { data: orders = [], isLoading } = useQuery({
-    queryKey: ['receivedOrders'],
-    queryFn: async () => {
-      const { data: userData } = await supabase.auth.getUser();
-      if (!userData.user) throw new Error("Not authenticated");
-
-      const { data, error } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          buyer:profiles!orders_buyer_id_fkey(full_name, email),
-          order_items(
-            quantity,
-            medicine:medicines(name)
-          )
-        `)
-        .eq('seller_id', userData.user.id)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: "Hata",
-          description: "Siparişler yüklenirken bir hata oluştu.",
-        });
-        throw error;
-      }
-
-      return data as Order[];
-    },
-  });
-
-  const updateOrderStatus = useMutation({
-    mutationFn: async ({ orderId, newStatus }: { orderId: string; newStatus: string }) => {
-      const { error } = await supabase
-        .from('orders')
-        .update({ status: newStatus })
-        .eq('id', orderId);
-
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['receivedOrders'] });
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Hata",
-        description: "Sipariş durumu güncellenirken bir hata oluştu.",
-      });
-      console.error('Status update error:', error);
-    },
-  });
 
   const handleStatusUpdate = (orderId: string, newStatus: string) => {
-    updateOrderStatus.mutate({ orderId, newStatus });
     toast({
       title: "Durum Güncellendi",
       description: `Sipariş durumu güncellendi: ${newStatus}`,
     });
   };
-
-  if (isLoading) {
-    return (
-      <DashboardLayout>
-        <div className="flex items-center justify-center h-full">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-        </div>
-      </DashboardLayout>
-    );
-  }
 
   return (
     <DashboardLayout>
@@ -127,20 +102,20 @@ const ReceivedOrders = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {orders.map((order) => (
+              {sampleOrders.map((order) => (
                 <TableRow 
                   key={order.id}
                   className={order.status === "pending" ? "animate-blink" : ""}
                 >
-                  <TableCell>{order.id.slice(0, 8)}</TableCell>
+                  <TableCell>{order.id}</TableCell>
                   <TableCell>
-                    {order.buyer?.full_name || order.buyer?.email || "İsimsiz Müşteri"}
+                    {order.buyer.full_name || order.buyer.email}
                   </TableCell>
                   <TableCell>
-                    {order.order_items[0]?.medicine?.name || "Bilinmeyen Ürün"}
+                    {order.order_items[0]?.medicine?.name}
                   </TableCell>
                   <TableCell>
-                    {order.order_items[0]?.quantity || 0}
+                    {order.order_items[0]?.quantity}
                   </TableCell>
                   <TableCell>₺{order.total_amount.toFixed(2)}</TableCell>
                   <TableCell>

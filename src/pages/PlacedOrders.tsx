@@ -12,40 +12,65 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+
+const sampleOrders = [
+  {
+    id: "ord1",
+    seller: {
+      id: "sel1",
+      full_name: "Eczane A",
+      email: "eczanea@example.com"
+    },
+    order_items: [
+      {
+        id: "item1",
+        medicine: { name: "Vitamin D" },
+        quantity: 2
+      }
+    ],
+    total_amount: 180.00,
+    created_at: "2024-03-15T10:00:00Z",
+    status: "processing"
+  },
+  {
+    id: "ord2",
+    seller: {
+      id: "sel2",
+      full_name: "Eczane B",
+      email: "eczaneb@example.com"
+    },
+    order_items: [
+      {
+        id: "item2",
+        medicine: { name: "Magnezyum" },
+        quantity: 1
+      }
+    ],
+    total_amount: 95.50,
+    created_at: "2024-03-14T15:30:00Z",
+    status: "delivered"
+  },
+  {
+    id: "ord3",
+    seller: {
+      id: "sel3",
+      full_name: "Eczane C",
+      email: "eczanec@example.com"
+    },
+    order_items: [
+      {
+        id: "item3",
+        medicine: { name: "B12 Vitamini" },
+        quantity: 3
+      }
+    ],
+    total_amount: 275.00,
+    created_at: "2024-03-13T09:15:00Z",
+    status: "processing"
+  }
+];
 
 const PlacedOrders = () => {
-  const { data: orders, isLoading } = useQuery({
-    queryKey: ['placed-orders'],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-
-      const { data: ordersData, error: ordersError } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          seller:profiles!orders_seller_id_fkey (
-            id,
-            full_name,
-            email
-          ),
-          order_items (
-            *,
-            medicine:medicines (
-              name
-            )
-          )
-        `)
-        .eq('buyer_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (ordersError) throw ordersError;
-      return ordersData;
-    },
-  });
-
   const helpContent = `
     Verilen Siparişler sayfasında:
     1. Tüm siparişlerinizi tarih sırasıyla görebilirsiniz
@@ -54,14 +79,6 @@ const PlacedOrders = () => {
     4. Satıcı profiline gidebilirsiniz
     5. Sipariş detaylarını görüntüleyebilirsiniz
   `;
-
-  if (isLoading) {
-    return (
-      <DashboardLayout>
-        <div>Yükleniyor...</div>
-      </DashboardLayout>
-    );
-  }
 
   return (
     <DashboardLayout helpContent={helpContent}>
@@ -90,7 +107,7 @@ const PlacedOrders = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {orders?.map((order) => (
+              {sampleOrders.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell>{order.id.slice(0, 8)}</TableCell>
                   <TableCell>
