@@ -52,11 +52,11 @@ const App = () => (
 );
 
 const ProtectedRoute = () => {
-  const session = useSession();
+  // const session = useSession();
   
-  if (!session) {
-    return <Navigate to="/login" />;
-  }
+  // if (!session) {
+  //   return <Navigate to="/login" />;
+  // }
 
   return (
     <Routes>

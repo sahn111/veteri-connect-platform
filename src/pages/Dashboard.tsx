@@ -1,4 +1,6 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const helpContent = `
@@ -7,6 +9,17 @@ const Dashboard = () => {
     2. Hızlı işlemler menüsünden sık kullanılan özelliklere erişebilirsiniz
     3. Sol menüden diğer sayfalara geçiş yapabilirsiniz
   `;
+  const navigate = useNavigate();
+  console.log("geldi sayfaya")
+  useEffect(() => {
+    // localStorage'dan token'ı al
+    const token = localStorage.getItem("authToken");
+
+    // Eğer token yoksa, login sayfasına yönlendir
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   return (
     <DashboardLayout helpContent={helpContent}>

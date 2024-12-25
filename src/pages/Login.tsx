@@ -18,38 +18,77 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+  
     if (isResetMode) {
-      const { error } = await supabase.auth.resetPasswordForEmail(credentials.email);
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: error.message,
+      // Şifre sıfırlama işlemi
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/reset-password/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: credentials.email,
+          }),
         });
-      } else {
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to reset password");
+        }
+  
         toast({
           title: "Password reset email sent",
           description: "Please check your email for the reset link.",
         });
         setIsResetMode(false);
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message,
+        });
       }
     } else {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: credentials.email,
-        password: credentials.password,
-      });
-
-      if (error) {
+      // Giriş işlemi
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/login/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: credentials.email,
+            password: credentials.password,
+          }),
+        });
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to sign in");
+        }
+  
+        const { token } = await response.json();
+        // Token'ı localStorage'da sakla
+        localStorage.setItem("authToken", token);
+  
+        toast({
+          title: "Login successful",
+          description: "You are being redirected to the dashboard.",
+        });
+  
+        // Dashboard'a yönlendirme
+        navigate("/dashboard");
+      } catch (error) {
         toast({
           variant: "destructive",
           title: "Error signing in",
           description: error.message,
         });
-      } else {
-        navigate("/dashboard");
       }
     }
   };
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCredentials({
