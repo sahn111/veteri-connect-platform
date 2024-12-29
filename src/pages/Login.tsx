@@ -5,122 +5,102 @@ import { LogIn } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
-  const [credentials, setCredentials] = useState({
-    email: "",
-    password: "",
-  });
+  const [credentials, setCredentials] = useState({ username: "", password: "" });
   const [isResetMode, setIsResetMode] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Handles form submission for login or password reset
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (isResetMode) {
-      // Şifre sıfırlama işlemi
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/reset-password/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: credentials.email,
-          }),
-        });
-  
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || "Failed to reset password");
-        }
-  
+
+    const endpoint = isResetMode
+      ? "http://127.0.0.1:8000/api/reset-password/"
+      : "http://127.0.0.1:8000/api/token/";
+
+    const payload = isResetMode
+      ? { username: credentials.username }
+      : credentials;
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        credentials: "include", // Send cookies along with the request
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "An error occurred");
+      }
+
+      const data = await response.json();
+
+      if (isResetMode) {
         toast({
-          title: "Password reset email sent",
-          description: "Please check your email for the reset link.",
+          title: "Password Reset",
+          description: "A password reset link has been sent to your email.",
         });
         setIsResetMode(false);
-      } catch (error) {
+      } else {
+        console.log
+        // Access and refresh tokens
+        const { access, refresh } = data;
+
+        // Save tokens in localStorage (or HttpOnly cookies from backend)
+        localStorage.setItem("access_token", access);
+        localStorage.setItem("refresh_token", refresh);
+
         toast({
-          variant: "destructive",
-          title: "Error",
-          description: error.message,
+          title: "Login Successful",
+          description: "Redirecting to the dashboard...",
         });
-      }
-    } else {
-      // Giriş işlemi
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/login/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: credentials.email,
-            password: credentials.password,
-          }),
-        });
-  
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || "Failed to sign in");
-        }
-  
-        const { token } = await response.json();
-        // Token'ı localStorage'da sakla
-        localStorage.setItem("authToken", token);
-  
-        toast({
-          title: "Login successful",
-          description: "You are being redirected to the dashboard.",
-        });
-  
-        // Dashboard'a yönlendirme
         navigate("/dashboard");
-      } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "Error signing in",
-          description: error.message,
-        });
       }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
     }
   };
-  
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCredentials({
-      ...credentials,
-      [e.target.name]: e.target.value,
-    });
+  // Handles input value changes
+  const handleChange = (e) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md mx-auto">
+        {/* Header */}
         <div className="text-center">
           <Link to="/" className="text-primary font-bold text-xl mb-4 block">
             VetMedEx
           </Link>
           <h2 className="text-3xl font-bold text-gray-900">
-            {isResetMode ? "Şifre Sıfırlama" : "Hoş Geldiniz"}
+            {isResetMode ? "Reset Your Password" : "Welcome Back"}
           </h2>
           <p className="mt-2 text-gray-600">
             {isResetMode
-              ? "E-posta adresinizi girin"
-              : "Hesabınıza giriş yapın"}
+              ? "Enter your email to reset your password"
+              : "Sign in to your account"}
           </p>
         </div>
 
+        {/* Form */}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="space-y-4">
+            {/* Email Field */}
             <div>
-              <Label htmlFor="email">E-posta adresi</Label>
+              <Label htmlFor="email">Email Address</Label>
               <Input
                 id="email"
-                name="email"
+                name="username"
                 type="email"
                 required
                 value={credentials.email}
@@ -129,9 +109,10 @@ const Login = () => {
               />
             </div>
 
+            {/* Password Field (only for login mode) */}
             {!isResetMode && (
               <div>
-                <Label htmlFor="password">Şifre</Label>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   name="password"
@@ -145,28 +126,31 @@ const Login = () => {
             )}
           </div>
 
+          {/* Toggle Between Login and Reset Mode */}
           <div className="flex items-center justify-between">
             <button
               type="button"
               onClick={() => setIsResetMode(!isResetMode)}
               className="text-sm font-medium text-primary hover:text-primary/80"
             >
-              {isResetMode ? "Giriş yap" : "Şifremi unuttum"}
+              {isResetMode ? "Back to Login" : "Forgot Password?"}
             </button>
           </div>
 
+          {/* Submit Button */}
           <Button type="submit" className="w-full" size="lg">
             <LogIn className="mr-2" />
-            {isResetMode ? "Şifre sıfırlama bağlantısı gönder" : "Giriş yap"}
+            {isResetMode ? "Send Reset Link" : "Sign In"}
           </Button>
 
+          {/* Register Link */}
           <p className="text-center text-sm text-gray-600">
-            Hesabınız yok mu?{" "}
+            Don’t have an account? {" "}
             <Link
               to="/register"
               className="font-medium text-primary hover:text-primary/80"
             >
-              Hemen kaydolun
+              Sign Up
             </Link>
           </p>
         </form>
