@@ -15,10 +15,11 @@ import PlacedOrders from "../pages/PlacedOrders";
 import ManageProducts from "../pages/ManageProducts";
 import AdminDashboard from "../pages/AdminDashboard";
 import { verifyToken, refreshToken } from "../utils/auth";
+import { useToast } from "@/components/ui/use-toast";
 
 const ProtectedRoute: React.FC = () => {
   const navigate = useNavigate();
-
+  const { toast } = useToast();
   React.useEffect(() => {
     const checkAuth = async () => {
       const isTokenValid = await verifyToken();
@@ -27,6 +28,10 @@ const ProtectedRoute: React.FC = () => {
         const isTokenRefreshed = await refreshToken();
 
         if (!isTokenRefreshed) {
+          toast({
+            title: "Session timeout",
+            description: "Redirecting to the login...",
+          });
           navigate("/login");
         }
       }
